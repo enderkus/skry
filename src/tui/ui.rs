@@ -780,11 +780,11 @@ fn overview(f: &mut Frame, area: Rect, data: &ViewData, h: &HostState, m: &HostM
         left,
     );
 
-    let [spark, info] = Layout::vertical([Constraint::Length(6), Constraint::Min(3)]).areas(right);
+    let [spark, info] = Layout::vertical([Constraint::Length(12), Constraint::Min(3)]).areas(right);
     let to_u64 = |v: &[Option<f64>]| -> Vec<u64> {
         v.iter().map(|x| x.unwrap_or(0.0).round() as u64).collect()
     };
-    let [s1, s2] = Layout::vertical([Constraint::Length(3), Constraint::Length(3)]).areas(spark);
+    let [s1, s2] = Layout::vertical([Constraint::Length(6), Constraint::Length(6)]).areas(spark);
     let cpu = to_u64(&data.history.cpu);
     let mem = to_u64(&data.history.mem);
     let sw = s1.width.saturating_sub(2) as usize;

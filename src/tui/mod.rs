@@ -204,6 +204,11 @@ pub trait FleetSource {
     fn snapshot(&self) -> FleetState;
     fn changes(&self) -> tokio::sync::watch::Receiver<u64>;
     fn history_path(&self) -> Option<&PathBuf>;
+
+    /// Sparkline data when there is no history database (demo mode).
+    fn synthetic_history(&self, _host: Option<&str>) -> Option<HistoryView> {
+        None
+    }
 }
 
 impl FleetSource for Engine {
@@ -261,6 +266,32 @@ impl FleetSource for DemoSource {
     fn history_path(&self) -> Option<&PathBuf> {
         None
     }
+
+    fn synthetic_history(&self, host: Option<&str>) -> Option<HistoryView> {
+        let fleet = self.snapshot();
+        let seed = host
+            .and_then(|h| fleet.hosts.iter().position(|x| x.name == h))
+            .unwrap_or(0) as f64;
+        let m = host
+            .and_then(|h| fleet.host(h))
+            .and_then(|h| h.metrics.clone())
+            .unwrap_or_default();
+        let (cpu, mem) = (m.cpu_pct().unwrap_or(0.0), m.mem_pct().unwrap_or(0.0));
+        let points = 240;
+        let wave = |i: usize, amp: f64| {
+            let x = i as f64;
+            ((x / 9.0 + seed).sin() * 0.7 + (x / 3.1 + seed * 2.0).cos() * 0.3) * amp
+        };
+        Some(HistoryView {
+            start: None,
+            cpu: (0..points)
+                .map(|i| Some((cpu + wave(i, 12.0)).clamp(0.0, 100.0)))
+                .collect(),
+            mem: (0..points)
+                .map(|i| Some((mem + wave(i, 2.0)).clamp(0.0, 100.0)))
+                .collect(),
+        })
+    }
 }
 
 /// Runs the TUI until the user quits.
@@ -302,7 +333,9 @@ async fn event_loop(
                 .selected
                 .clone()
                 .or_else(|| live.hosts.first().map(|h| h.name.clone()));
-            history = history_view(store.as_ref(), selected.as_deref(), end);
+            history = engine
+                .synthetic_history(selected.as_deref())
+                .unwrap_or_else(|| history_view(store.as_ref(), selected.as_deref(), end));
             app.history_start = history.start;
             history_loaded_at = Some(Instant::now());
             history_key = Some(key);

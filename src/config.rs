@@ -268,7 +268,8 @@ pub struct SecurityConfig {
     /// because dnf appends to its own log files even for read-only queries,
     /// and it requires root.
     pub rpm_updates: bool,
-    /// TLS endpoints (`host:port`) checked from the local machine for every run.
+    /// TLS endpoints (`host:port`) checked from the local machine at start,
+    /// then hourly while monitoring.
     pub tls: Vec<String>,
     pub tls_warning_days: i64,
     pub tls_critical_days: i64,
