@@ -199,8 +199,72 @@ fn history_view(store: Option<&Store>, host: Option<&str>, end: DateTime<Utc>) -
     HistoryView { start, cpu, mem }
 }
 
+/// Where the TUI gets its data: a running [`Engine`], or the demo fleet.
+pub trait FleetSource {
+    fn snapshot(&self) -> FleetState;
+    fn changes(&self) -> tokio::sync::watch::Receiver<u64>;
+    fn history_path(&self) -> Option<&PathBuf>;
+}
+
+impl FleetSource for Engine {
+    fn snapshot(&self) -> FleetState {
+        Engine::snapshot(self)
+    }
+
+    fn changes(&self) -> tokio::sync::watch::Receiver<u64> {
+        Engine::changes(self)
+    }
+
+    fn history_path(&self) -> Option<&PathBuf> {
+        Engine::history_path(self)
+    }
+}
+
+/// Animated synthetic fleet for `skry demo`.
+pub struct DemoSource {
+    fleet: std::sync::Arc<std::sync::RwLock<FleetState>>,
+    changes: tokio::sync::watch::Receiver<u64>,
+}
+
+impl DemoSource {
+    pub fn start() -> Self {
+        let started = Utc::now();
+        let fleet = std::sync::Arc::new(std::sync::RwLock::new(demo::fleet(started, 0.0)));
+        let (tx, changes) = tokio::sync::watch::channel(0u64);
+        let f = fleet.clone();
+        tokio::spawn(async move {
+            let mut n = 0u64;
+            loop {
+                tokio::time::sleep(Duration::from_secs(2)).await;
+                n += 1;
+                let now = Utc::now();
+                let t = (now - started).num_milliseconds() as f64 / 1000.0;
+                *f.write().expect("demo lock") = demo::fleet(now, t);
+                if tx.send(n).is_err() {
+                    break;
+                }
+            }
+        });
+        DemoSource { fleet, changes }
+    }
+}
+
+impl FleetSource for DemoSource {
+    fn snapshot(&self) -> FleetState {
+        self.fleet.read().expect("demo lock").clone()
+    }
+
+    fn changes(&self) -> tokio::sync::watch::Receiver<u64> {
+        self.changes.clone()
+    }
+
+    fn history_path(&self) -> Option<&PathBuf> {
+        None
+    }
+}
+
 /// Runs the TUI until the user quits.
-pub async fn run(engine: &Engine, cfg: &Config) -> std::io::Result<()> {
+pub async fn run(engine: &impl FleetSource, cfg: &Config) -> std::io::Result<()> {
     let mut terminal = ratatui::try_init()?;
     let result = event_loop(&mut terminal, engine, cfg).await;
     ratatui::restore();
@@ -209,7 +273,7 @@ pub async fn run(engine: &Engine, cfg: &Config) -> std::io::Result<()> {
 
 async fn event_loop(
     terminal: &mut ratatui::DefaultTerminal,
-    engine: &Engine,
+    engine: &impl FleetSource,
     cfg: &Config,
 ) -> std::io::Result<()> {
     let mut app = App::default();
