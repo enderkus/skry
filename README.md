@@ -1,5 +1,7 @@
 # skry
 
+**English** · [Türkçe](README.tr.md)
+
 **See every server. Install nothing.**
 
 [![CI](https://github.com/enderkus/skry/actions/workflows/ci.yml/badge.svg)](https://github.com/enderkus/skry/actions/workflows/ci.yml)

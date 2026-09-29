@@ -52,7 +52,7 @@ jobs:
         run: |
           name="skry-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "dist/$name"
-          cp "target/${{ matrix.target }}/release/skry" README.md LICENSE-MIT LICENSE-APACHE CHANGELOG.md "dist/$name/"
+          cp "target/${{ matrix.target }}/release/skry" README.md README.tr.md LICENSE-MIT LICENSE-APACHE CHANGELOG.md "dist/$name/"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
           (cd dist && shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256")
       - name: Package (Windows)
@@ -61,7 +61,7 @@ jobs:
         run: |
           $name = "skry-$env:GITHUB_REF_NAME-${{ matrix.target }}"
           New-Item -ItemType Directory -Force "dist/$name" | Out-Null
-          Copy-Item "target/${{ matrix.target }}/release/skry.exe", README.md, LICENSE-MIT, LICENSE-APACHE, CHANGELOG.md "dist/$name/"
+          Copy-Item "target/${{ matrix.target }}/release/skry.exe", README.md, README.tr.md, LICENSE-MIT, LICENSE-APACHE, CHANGELOG.md "dist/$name/"
           Compress-Archive -Path "dist/$name" -DestinationPath "dist/$name.zip"
           $hash = (Get-FileHash "dist/$name.zip" -Algorithm SHA256).Hash.ToLower()
           "$hash  $name.zip" | Out-File -Encoding ascii "dist/$name.zip.sha256"
