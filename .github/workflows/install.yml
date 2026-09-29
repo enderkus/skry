@@ -1,0 +1,72 @@
+name: Installers
+
+# Runs the install scripts against the published release on every platform.
+
+on:
+  push:
+    branches: [main]
+    paths: [install.sh, install.ps1, .github/workflows/install.yml]
+  pull_request:
+    paths: [install.sh, install.ps1, .github/workflows/install.yml]
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: false
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release tag to install (default latest)
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  unix:
+    name: install.sh (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install to the default location
+        run: sh install.sh
+        env:
+          SKRY_VERSION: ${{ inputs.version }}
+          SKRY_INSTALL_DIR: ${{ runner.temp }}/bin
+      - name: Run
+        run: |
+          "$RUNNER_TEMP/bin/skry" --version
+          "$RUNNER_TEMP/bin/skry" script | head -3
+
+  alpine:
+    name: install.sh (Alpine, BusyBox wget)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install and run in Alpine
+        run: |
+          docker run --rm -e SKRY_VERSION -v "$PWD/install.sh:/install.sh:ro" alpine:3.20 \
+            sh -c 'sh /install.sh && skry --version'
+        env:
+          SKRY_VERSION: ${{ inputs.version }}
+
+  windows:
+    name: install.ps1 (windows-latest)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install
+        shell: pwsh
+        run: ./install.ps1
+        env:
+          SKRY_VERSION: ${{ inputs.version }}
+      - name: Run
+        shell: pwsh
+        run: |
+          & "$env:LOCALAPPDATA\Programs\skry\skry.exe" --version
+          $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+          if (($userPath -split ';') -notcontains "$env:LOCALAPPDATA\Programs\skry") { throw 'install dir not added to PATH' }
