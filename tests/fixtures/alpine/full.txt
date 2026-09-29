@@ -1,0 +1,172 @@
+
+@@SKRY-0123456789abcdef:meta@@
+hostname=3b22aedb2fb9
+kernel=7.0.14-orbstack-00380-ga7e0a2dc9535
+arch=aarch64
+time=1790643997
+localtime=2026-09-29T01
+pagesize=4096
+clk_tck=100
+uid=1000
+
+@@SKRY-0123456789abcdef:stat@@
+cpu  10002 0 2326 442964 796 0 1170 0 0 0
+cpu0 1961 0 426 42624 445 0 984 0 0 0
+cpu1 951 0 246 44344 73 0 91 0 0 0
+cpu2 1311 0 287 43977 39 0 40 0 0 0
+cpu3 946 0 215 44414 39 0 22 0 0 0
+cpu4 974 0 236 44376 38 0 12 0 0 0
+cpu5 795 0 243 44546 33 0 7 0 0 0
+cpu6 1008 0 234 44325 42 0 5 0 0 0
+cpu7 921 0 228 44447 29 0 4 0 0 0
+cpu8 1132 0 205 44236 54 0 2 0 0 0
+cpu9 0 0 0 45671 0 0 0 0 0 0
+btime 1790643540
+procs_running 1
+procs_blocked 0
+
+@@SKRY-0123456789abcdef:meminfo@@
+MemTotal:        8196572 kB
+MemFree:         7343464 kB
+MemAvailable:    7568452 kB
+Buffers:             132 kB
+Cached:           330256 kB
+SwapCached:            0 kB
+Active:           185004 kB
+Inactive:         307884 kB
+Active(anon):      53584 kB
+Inactive(anon):   132224 kB
+Active(file):     131420 kB
+Inactive(file):   175660 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       9245140 kB
+SwapFree:        9245140 kB
+Dirty:               172 kB
+Writeback:             0 kB
+AnonPages:        156308 kB
+Mapped:            98168 kB
+Shmem:             23248 kB
+KReclaimable:     122304 kB
+Slab:             199376 kB
+SReclaimable:     122304 kB
+SUnreclaim:        77072 kB
+KernelStack:        7184 kB
+PageTables:        16440 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    13343424 kB
+Committed_AS:    1853884 kB
+VmallocTotal:   135288315904 kB
+VmallocUsed:       45768 kB
+VmallocChunk:          0 kB
+Percpu:             3840 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Balloon:               0 kB
+
+@@SKRY-0123456789abcdef:loadavg@@
+0.12 0.17 0.10 1/486 197
+
+@@SKRY-0123456789abcdef:uptime@@
+456.72 4429.64
+
+@@SKRY-0123456789abcdef:netdev@@
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:   21728      69    0    0    0     0          0         0    21728      69    0    0    0     0       0          0
+  eth0: 3832692     410    0    0    0     0          0         0    46597     303    0    0    0     0       0          0
+
+@@SKRY-0123456789abcdef:diskstats@@
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43       0 nbd0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 3649 15 683968 35 0 0 0 0 0 840 35 0 0 0 0 0 0
+ 254      16 vdb 31455 69 2133841 71 51094 20584 3503328 11979 0 11945 20296 7419 0 1573896 508 14196 7737
+ 254      17 vdb1 31382 69 2133768 71 51094 20584 3503328 11979 0 12912 12559 7419 0 1573896 508 0 0
+ 254      32 vdc 3 0 24 0 1 0 8 0 0 9 8 1 0 2097144 8 0 0
+ 253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
+
+@@SKRY-0123456789abcdef:df@@
+Filesystem           1024-blocks    Used Available Capacity Mounted on
+overlay               86376448  16256196  70120252  19% /
+tmpfs                    65536         0     65536   0% /dev
+shm                    4098048         0   4098048   0% /dev/shm
+/dev/vdb1             86376448  16256196  70120252  19% /etc/resolv.conf
+/dev/vdb1             86376448  16256196  70120252  19% /etc/hostname
+/dev/vdb1             86376448  16256196  70120252  19% /etc/hosts
+tmpfs                        4         0         4   0% /proc/asound
+tmpfs                    65536         0     65536   0% /proc/interrupts
+tmpfs                    65536         0     65536   0% /proc/keys
+tmpfs                    65536         0     65536   0% /proc/timer_list
+tmpfs                        4         0         4   0% /sys/firmware
+
+@@SKRY-0123456789abcdef:procstat@@
+1 S 1 0 1210 sshd
+122 S 0 0 661 sshd
+181 S 0 0 1270 sshd
+183 S 0 0 1024 sshd
+184 S 0 0 267 sh
+203 S 0 0 128 timeout
+206 S 0 0 128 timeout
+207 R 0 0 235 cat
+208 R 0 0 235 awk
+57 S 0 0 192 syslogd
+
+@@SKRY-0123456789abcdef:ps@@
+    1 root
+   57 root
+  122 root
+  181 root
+  183 skry
+  184 skry
+  203 skry
+  206 skry
+  209 skry
+
+@@SKRY-0123456789abcdef:os@@
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.20.10
+PRETTY_NAME="Alpine Linux v3.20"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+
+@@SKRY-0123456789abcdef:cpuinfo@@
+
+@@SKRY-0123456789abcdef:ipaddr@@
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: eth0    inet 192.168.117.5/24 brd 192.168.117.255 scope global eth0\       valid_lft forever preferred_lft forever
+
+@@SKRY-0123456789abcdef:ports@@
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      
+tcp        0      0 127.0.0.11:36923        0.0.0.0:*               LISTEN      
+tcp        0      0 0.0.0.0:2222            0.0.0.0:*               LISTEN      
+tcp        0      0 :::22                   :::*                    LISTEN      
+tcp        0      0 :::2222                 :::*                    LISTEN      
+
+@@SKRY-0123456789abcdef:containers@@
+
+@@SKRY-0123456789abcdef:units@@
+
+@@SKRY-0123456789abcdef:logins@@
+#source /var/log/messages
+k 3 127.0.0.1 Sep 29 01
+
+@@SKRY-0123456789abcdef:updates@@
+#manager apk
+
+@@SKRY-0123456789abcdef:end@@

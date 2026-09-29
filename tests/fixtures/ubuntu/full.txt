@@ -1,0 +1,159 @@
+
+@@SKRY-0123456789abcdef:meta@@
+hostname=cff44fff2528
+kernel=7.0.14-orbstack-00380-ga7e0a2dc9535
+arch=aarch64
+time=1790643997
+localtime=2026-09-29T01
+pagesize=4096
+clk_tck=100
+uid=1001
+
+@@SKRY-0123456789abcdef:stat@@
+cpu  9998 0 2321 442755 796 0 1167 0 0 0
+cpu0 1960 0 425 42604 445 0 982 0 0 0
+cpu1 950 0 246 44323 73 0 90 0 0 0
+cpu2 1310 0 287 43957 39 0 40 0 0 0
+cpu3 946 0 215 44393 39 0 22 0 0 0
+cpu4 974 0 235 44355 38 0 12 0 0 0
+cpu5 795 0 243 44524 33 0 7 0 0 0
+cpu6 1008 0 234 44304 42 0 5 0 0 0
+cpu7 921 0 227 44426 29 0 4 0 0 0
+cpu8 1131 0 205 44215 54 0 2 0 0 0
+cpu9 0 0 0 45649 0 0 0 0 0 0
+btime 1790643540
+procs_running 1
+procs_blocked 0
+
+@@SKRY-0123456789abcdef:meminfo@@
+MemTotal:        8196572 kB
+MemFree:         7388580 kB
+MemAvailable:    7568620 kB
+Buffers:             132 kB
+Cached:           285304 kB
+SwapCached:            0 kB
+Active:           144356 kB
+Inactive:         304340 kB
+Active(anon):      54264 kB
+Inactive(anon):   132300 kB
+Active(file):      90092 kB
+Inactive(file):   172040 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       9245140 kB
+SwapFree:        9245140 kB
+Dirty:               164 kB
+Writeback:             0 kB
+AnonPages:        156860 kB
+Mapped:            98184 kB
+Shmem:             23248 kB
+KReclaimable:     122304 kB
+Slab:             198896 kB
+SReclaimable:     122304 kB
+SUnreclaim:        76592 kB
+KernelStack:        7152 kB
+PageTables:         9812 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    13343424 kB
+Committed_AS:    1855488 kB
+VmallocTotal:   135288315904 kB
+VmallocUsed:       45768 kB
+VmallocChunk:          0 kB
+Percpu:             3840 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Balloon:               0 kB
+
+@@SKRY-0123456789abcdef:loadavg@@
+0.12 0.17 0.10 1/486 85
+
+@@SKRY-0123456789abcdef:uptime@@
+456.50 4427.55
+
+@@SKRY-0123456789abcdef:netdev@@
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+  eth0:   23112     103    0    0    0     0          0         0    24071      99    0    0    0     0       0          0
+
+@@SKRY-0123456789abcdef:diskstats@@
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43       0 nbd0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 3611 15 682336 35 0 0 0 0 0 838 35 0 0 0 0 0 0
+ 254      16 vdb 31084 40 2049305 69 51094 20584 3503328 11979 0 11939 20295 7419 0 1573896 508 14196 7737
+ 254      17 vdb1 31011 40 2049232 69 51094 20584 3503328 11979 0 12904 12557 7419 0 1573896 508 0 0
+ 254      32 vdc 3 0 24 0 1 0 8 0 0 9 8 1 0 2097144 8 0 0
+ 253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
+
+@@SKRY-0123456789abcdef:df@@
+Filesystem     1024-blocks     Used Available Capacity Mounted on
+overlay           86376448 16256196  70120252      19% /
+tmpfs                65536        0     65536       0% /dev
+shm                4098048        0   4098048       0% /dev/shm
+/dev/vdb1         86376448 16256196  70120252      19% /etc/hosts
+tmpfs                    4        0         4       0% /proc/asound
+
+@@SKRY-0123456789abcdef:procstat@@
+1 S 1 0 949 sshd
+60 S 0 0 1922 sshd
+71 S 0 0 1466 sshd
+72 S 0 0 358 sh
+91 R 0 0 285 cat
+92 R 0 0 0 awk
+
+@@SKRY-0123456789abcdef:ps@@
+      1 root
+     60 root
+     71 skry
+     72 skry
+     93 skry
+
+@@SKRY-0123456789abcdef:os@@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
+@@SKRY-0123456789abcdef:cpuinfo@@
+
+@@SKRY-0123456789abcdef:ipaddr@@
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: eth0    inet 192.168.117.6/24 brd 192.168.117.255 scope global eth0\       valid_lft forever preferred_lft forever
+
+@@SKRY-0123456789abcdef:ports@@
+LISTEN 0      4096   127.0.0.11:39327 0.0.0.0:*
+LISTEN 0      128       0.0.0.0:22    0.0.0.0:*
+LISTEN 0      128          [::]:22       [::]:*
+
+@@SKRY-0123456789abcdef:containers@@
+
+@@SKRY-0123456789abcdef:units@@
+
+@@SKRY-0123456789abcdef:logins@@
+
+@@SKRY-0123456789abcdef:updates@@
+#manager apt
+
+@@SKRY-0123456789abcdef:end@@

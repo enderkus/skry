@@ -1,0 +1,22 @@
+#runtime docker
+c|skry-fx-exited|alpine:3.20|Exited (0) 8 seconds ago|exited
+c|skry-it-debian-1|skry-it-debian|Up 28 seconds|running
+c|skry-it-rocky-1|skry-it-rocky|Up 28 seconds|running
+c|skry-it-bastion-1|skry-it-bastion|Up 28 seconds|running
+c|skry-it-alpine-1|skry-it-alpine|Up 28 seconds|running
+c|skry-it-ubuntu-1|skry-it-ubuntu|Up 28 seconds|running
+c|skry-it-hidden-1|skry-it-hidden|Up 28 seconds|running
+c|skry-fx-rocky|rockylinux:9|Up 2 minutes|running
+c|skry-fx-alpine|alpine:3.20|Up 2 minutes|running
+c|skry-fx-ubuntu|ubuntu:24.04|Up 2 minutes|running
+c|skry-fx-debian|debian:12|Up 2 minutes|running
+s|skry-it-debian-1|0.00%|14MiB / 7.817GiB|0.17%
+s|skry-it-rocky-1|0.00%|3.328MiB / 7.817GiB|0.04%
+s|skry-it-bastion-1|0.00%|4.391MiB / 7.817GiB|0.05%
+s|skry-it-alpine-1|0.00%|1.992MiB / 7.817GiB|0.02%
+s|skry-it-ubuntu-1|0.00%|8.441MiB / 7.817GiB|0.11%
+s|skry-it-hidden-1|0.00%|1.289MiB / 7.817GiB|0.02%
+s|skry-fx-rocky|0.00%|224KiB / 7.817GiB|0.00%
+s|skry-fx-alpine|0.00%|384KiB / 7.817GiB|0.00%
+s|skry-fx-ubuntu|0.00%|116KiB / 7.817GiB|0.00%
+s|skry-fx-debian|0.00%|108KiB / 7.817GiB|0.00%

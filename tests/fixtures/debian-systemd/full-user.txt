@@ -1,0 +1,165 @@
+
+@@SKRY-0123456789abcdef:meta@@
+hostname=87c87fc63d72
+kernel=7.0.14-orbstack-00380-ga7e0a2dc9535
+arch=aarch64
+time=1790643997
+localtime=2026-09-29T01
+pagesize=4096
+clk_tck=100
+uid=1000
+
+@@SKRY-0123456789abcdef:stat@@
+cpu  10051 0 2331 443474 796 0 1172 0 0 0
+cpu0 1961 0 426 42679 445 0 985 0 0 0
+cpu1 951 0 246 44399 73 0 91 0 0 0
+cpu2 1344 0 288 43999 39 0 40 0 0 0
+cpu3 958 0 216 44457 39 0 22 0 0 0
+cpu4 974 0 236 44432 38 0 12 0 0 0
+cpu5 796 0 244 44601 33 0 7 0 0 0
+cpu6 1008 0 235 44381 42 0 5 0 0 0
+cpu7 922 0 228 44503 29 0 4 0 0 0
+cpu8 1132 0 206 44292 54 0 2 0 0 0
+cpu9 0 0 0 45727 0 0 0 0 0 0
+btime 1790643540
+procs_running 1
+procs_blocked 0
+
+@@SKRY-0123456789abcdef:meminfo@@
+MemTotal:        8196572 kB
+MemFree:         7354380 kB
+MemAvailable:    7591552 kB
+Buffers:             136 kB
+Cached:           342436 kB
+SwapCached:            0 kB
+Active:           199060 kB
+Inactive:         308484 kB
+Active(anon):      56056 kB
+Inactive(anon):   132224 kB
+Active(file):     143004 kB
+Inactive(file):   176260 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       9245140 kB
+SwapFree:        9245140 kB
+Dirty:               228 kB
+Writeback:             0 kB
+AnonPages:        158776 kB
+Mapped:           106904 kB
+Shmem:             23252 kB
+KReclaimable:     122304 kB
+Slab:             199616 kB
+SReclaimable:     122304 kB
+SUnreclaim:        77312 kB
+KernelStack:        7280 kB
+PageTables:        17792 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    13343424 kB
+Committed_AS:    1932772 kB
+VmallocTotal:   135288315904 kB
+VmallocUsed:       45768 kB
+VmallocChunk:          0 kB
+Percpu:             3840 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Balloon:               0 kB
+
+@@SKRY-0123456789abcdef:loadavg@@
+0.12 0.17 0.10 2/488 389
+
+@@SKRY-0123456789abcdef:uptime@@
+457.28 4434.74
+
+@@SKRY-0123456789abcdef:netdev@@
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:   63690     203    0    0    0     0          0         0    63690     203    0    0    0     0       0          0
+  eth0:   15182      27    0    0    0     0          0         0      952      14    0    0    0     0       0          0
+
+@@SKRY-0123456789abcdef:diskstats@@
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43       0 nbd0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 3698 15 686544 35 0 0 0 0 0 842 35 0 0 0 0 0 0
+ 254      16 vdb 31528 69 2152761 71 51094 20584 3503328 11979 0 11947 20296 7419 0 1573896 508 14196 7737
+ 254      17 vdb1 31455 69 2152688 71 51094 20584 3503328 11979 0 12914 12559 7419 0 1573896 508 0 0
+ 254      32 vdc 3 0 24 0 1 0 8 0 0 9 8 1 0 2097144 8 0 0
+ 253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
+
+@@SKRY-0123456789abcdef:df@@
+Filesystem     1024-blocks     Used Available Capacity Mounted on
+overlay           86376448 16256196  70120252      19% /
+tmpfs                65536        0     65536       0% /dev
+shm                4098048        0   4098048       0% /dev/shm
+/dev/vdb1         86376448 16256196  70120252      19% /etc/hosts
+tmpfs              1639316       16   1639300       1% /run
+tmpfs                 5120        0      5120       0% /run/lock
+
+@@SKRY-0123456789abcdef:procstat@@
+1 S 3 1 2063 systemd
+27 S 1 1 1766 systemd-journal
+371 S 0 0 345 sh
+376 S 0 0 326 sh
+395 R 0 0 179 cat
+396 R 0 0 186 awk
+43 S 0 0 942 rsyslogd
+50 S 0 0 1342 sshd
+
+@@SKRY-0123456789abcdef:ps@@
+      1 root
+     27 root
+     43 root
+     50 root
+    371 skry
+    376 skry
+    397 skry
+
+@@SKRY-0123456789abcdef:os@@
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+@@SKRY-0123456789abcdef:cpuinfo@@
+
+@@SKRY-0123456789abcdef:ipaddr@@
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: eth0    inet 192.168.215.6/24 brd 192.168.215.255 scope global eth0\       valid_lft forever preferred_lft forever
+
+@@SKRY-0123456789abcdef:ports@@
+LISTEN 0      128    0.0.0.0:22 0.0.0.0:*
+LISTEN 0      128       [::]:22    [::]:*
+
+@@SKRY-0123456789abcdef:containers@@
+
+@@SKRY-0123456789abcdef:units@@
+#systemd
+#rc 1
+
+@@SKRY-0123456789abcdef:logins@@
+#source journal
+#denied
+#denied
+
+@@SKRY-0123456789abcdef:updates@@
+#manager apt
+Inst tzdata [2026b-0+deb12u1] (2026c-0+deb12u1 Debian-Security:12/oldstable-security [all])
+
+@@SKRY-0123456789abcdef:end@@

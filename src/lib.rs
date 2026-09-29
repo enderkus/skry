@@ -5,3 +5,5 @@
 //! output, [`model`] turns raw counters into rates, and [`engine`] schedules
 //! everything for a fleet. Consumers ([`tui`], [`web`], [`cli`]) read the
 //! resulting state.
+
+pub mod collect;
