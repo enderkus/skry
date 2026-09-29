@@ -4,7 +4,7 @@ name: skry-it
 
 x-common: &common
   environment:
-    SKRY_TEST_PUBKEY: ${SKRY_TEST_PUBKEY:?set SKRY_TEST_PUBKEY}
+    SKRY_TEST_PUBKEY: ${SKRY_TEST_PUBKEY:-}
   networks: [fleet]
 
 services:
