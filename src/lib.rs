@@ -6,8 +6,10 @@
 //! everything for a fleet. Consumers ([`tui`], [`web`], [`cli`]) read the
 //! resulting state.
 
+pub mod baseline;
 pub mod collect;
 pub mod config;
 pub mod model;
 pub mod ssh;
 pub mod store;
+pub mod util;
