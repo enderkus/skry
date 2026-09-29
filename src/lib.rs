@@ -16,4 +16,5 @@ pub mod security;
 pub mod snapshot;
 pub mod ssh;
 pub mod store;
+pub mod tui;
 pub mod util;

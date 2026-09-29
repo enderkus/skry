@@ -16,7 +16,7 @@ use crate::collect::{
     ListenPort, LoadAvg, NetDevCounters, Probe, RawSample, Updates,
 };
 
-pub use health::{Health, Level, Thresholds};
+pub use health::{Band, Health, Level, Thresholds};
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct CpuUsage {

@@ -1,0 +1,18 @@
+---
+source: src/tui/render_tests.rs
+expression: t.backend()
+---
+" skry  8 hosts ● 3 ok  ● 1 deviation  ● 1 warning  ● 1 critical  ● 2 unreachable  so LIVE  every 2s "
+" legacy-app  unreachable  admin@10.0.9.4:22                                                         "
+"                                                                                                    "
+" 1 Overview │ 2 Processes │ 3 Network & Disks │ 4 Services & Containers │ 5 Security                "
+"┌ auth failed since 11:48:00 ──────────────────────────────────────────────────────────────────────┐"
+"│authentication failed for admin@10.0.9.4:22 (tried 2 keys)                                        │"
+"└──────────────────────────────────────────────────────────────────────────────────────────────────┘"
+"                                                                                                    "
+"                                                                                                    "
+"                                                                                                    "
+"                                                                                                    "
+"                                                                                                    "
+" 09:00 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━● now             "
+" Esc back  Tab panel  n/p next/prev host  ↑↓ scroll  [ ] time  s snapshot  ? help  q quit           "

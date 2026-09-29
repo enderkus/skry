@@ -1,0 +1,26 @@
+---
+source: src/tui/render_tests.rs
+expression: t.backend()
+---
+" skry  8 hosts ● 3 ok  ● 1 deviation  ● 1 warning  ● 1 critical  ● 2 unreachable  sort:status                      LIVE  every 2s "
+"┌ security pulse · failed SSH logins (24h), pending security updates, listening ports ───────────────────────────────────────────┐"
+"│HOST                   PULSE     LOGINS   SEC/UPD    UNEXPECTED PORTS     FINDINGS                                              │"
+"│web-1                  ok        3        0 / 4      ok                                                                         │"
+"│web-2                  ok        3        0 / 4      ok                                                                         │"
+"│db-1                   critical  1840     5 / 23     5432                 1840 failed SSH logins in 24h (top: 198.51.100.23 ×170│"
+"│cache-1                ok        3        0 / 4      ok                                                                         │"
+"│ci-runner              ok        3        0 / 4      ok                                                                         │"
+"│backup                 ok        3        0 / 4      ok                                                                         │"
+"│legacy-app             auth fail                                                                                                │"
+"│staging-1              host key                                                                                                 │"
+"│                                                                                                                                │"
+"│                                                                                                                                │"
+"│                                                                                                                                │"
+"└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘"
+"┌ TLS certificates (checked from this machine) ──────────────────────────────────────────────────────────────────────────────────┐"
+"│ENDPOINT                       STATUS    EXPIRY                       SUBJECT                  ISSUER                           │"
+"│www.example.com:443            ok        expires in 64 days           www.example.com          R11                              │"
+"│api.example.com:443            critical  expires in 5 days            api.example.com          R10                              │"
+"└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘"
+" 09:00 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━● now             "
+" Esc back  ↑↓ scroll  [ ] time  s snapshot  q quit                                                                                "

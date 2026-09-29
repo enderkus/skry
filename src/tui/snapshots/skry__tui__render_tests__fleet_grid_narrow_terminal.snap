@@ -1,0 +1,24 @@
+---
+source: src/tui/render_tests.rs
+expression: t.backend()
+---
+" skry  8 hosts ● 3 ok  ● 1 deviation  ● 1 warnin LIVE  every 2s "
+"┏ legacy-app ━━━━━ unreachable ┓╭ staging-1 ────── unreachable ╮"
+"┃✖ auth failed                 ┃│✖ host key                    │"
+"┃authentication failed for     ┃│unknown host key for          │"
+"┃admin@10.0.9.4:22 (tried 2    ┃│staging-1.example.com         │"
+"┃keys)                         ┃│(SHA256:Zm9vYmFy…); verify it,│"
+"┃                              ┃│then rerun with --accept-new  │"
+"┗━━━━━━━━━━━━━━━━━━━━━━━━ @ops ┛╰──────────────────── @staging ╯"
+"╭ db-1 ────────────── critical ╮╭ ci-runner ────────── warning ╮"
+"│CPU ██████████████████▉·  94% ││CPU ███████████▋········  58% │"
+"│MEM █████████████████▋··  88% ││MEM █████████████▍······  67% │"
+"│DSK ██████████████▎·····  71% ││DSK ████████████████▊···  84% │"
+"│LD 26.69 ↓1.1MiB/s ↑317KiB/s  ││LD 17.71 ↓1.2MiB/s ↑468KiB/s  │"
+"│✖ 1 unit ⚑ 3 security         ││                              │"
+"╰───────────────── @production ╯╰────────────────────── @build ╯"
+"                                                                "
+"                                                                "
+"                                                  rows 1-2 of 4 "
+" 09:00 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━● now             "
+" ←↑↓→ move  Enter details  / filter  f status  o sort  [ ] time "

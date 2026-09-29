@@ -1,0 +1,12 @@
+---
+source: src/tui/render_tests.rs
+expression: t.backend()
+---
+" skry  0 hosts sort:status                   LIVE  every 2s "
+"                          no hosts                          "
+"                                                            "
+"                                                            "
+"                                                            "
+"                                                            "
+" 09:00 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━● now             "
+" ←↑↓→ move  Enter details  / filter  f status  o sort  [ ] t"
