@@ -164,8 +164,12 @@ pub fn known_algorithms(files: &[PathBuf], host: &str, port: u16) -> Vec<Algorit
     out
 }
 
-/// Appends a host key (as used by `--accept-new`).
+/// Appends a host key (as used by `--accept-new`). Safe to call from many
+/// connections at once: writes are serialised and each line is written in
+/// a single call.
 pub fn learn(path: &Path, host: &str, port: u16, key: &PublicKey) -> std::io::Result<()> {
+    static LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+    let _guard = LOCK.lock().unwrap_or_else(|e| e.into_inner());
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent)?;
     }
@@ -178,6 +182,11 @@ pub fn learn(path: &Path, host: &str, port: u16, key: &PublicKey) -> std::io::Re
     let needs_newline = std::fs::read(path)
         .map(|b| !b.is_empty() && !b.ends_with(b"\n"))
         .unwrap_or(false);
+    let mut line = String::new();
+    if needs_newline {
+        line.push('\n');
+    }
+    line.push_str(&format!("{} {ktype} {data}\n", host_port_name(host, port)));
     let mut opts = std::fs::OpenOptions::new();
     opts.create(true).append(true);
     #[cfg(unix)]
@@ -185,11 +194,7 @@ pub fn learn(path: &Path, host: &str, port: u16, key: &PublicKey) -> std::io::Re
         use std::os::unix::fs::OpenOptionsExt;
         opts.mode(0o600);
     }
-    let mut f = opts.open(path)?;
-    if needs_newline {
-        writeln!(f)?;
-    }
-    writeln!(f, "{} {ktype} {data}", host_port_name(host, port))
+    opts.open(path)?.write_all(line.as_bytes())
 }
 
 /// SHA256 fingerprint as printed by OpenSSH.
@@ -299,6 +304,29 @@ mod tests {
         );
         let text = std::fs::read_to_string(&p).unwrap();
         assert!(text.starts_with("[new]:2200 ssh-ed25519 AAAA"));
+    }
+
+    #[test]
+    fn concurrent_learning_keeps_lines_intact() {
+        let dir = tempfile::tempdir().unwrap();
+        let p = dir.path().join("known_hosts");
+        let handles: Vec<_> = (0..16)
+            .map(|i| {
+                let p = p.clone();
+                std::thread::spawn(move || learn(&p, "h", 2200 + i, &key(ED1)).unwrap())
+            })
+            .collect();
+        for h in handles {
+            h.join().unwrap();
+        }
+        let files = vec![p.clone()];
+        for i in 0..16 {
+            assert_eq!(
+                check(&files, "h", 2200 + i, &key(ED1)),
+                HostKeyStatus::Known
+            );
+        }
+        assert_eq!(std::fs::read_to_string(&p).unwrap().lines().count(), 16);
     }
 
     #[test]
