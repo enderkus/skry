@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skry — See every server. Install nothing.</title>
+<meta name="description" content="skry monitors one or many Linux servers over plain SSH, with nothing installed or written on them. Terminal UI, web dashboard, Prometheus, alerts.">
+<meta property="og:title" content="skry — See every server. Install nothing.">
+<meta property="og:description" content="Agentless Linux server monitoring over plain SSH. Terminal UI, web dashboard, Prometheus endpoint, alerts and incident snapshots.">
+<meta property="og:image" content="https://enderkus.github.io/skry/assets/og.png">
+<link rel="alternate" hreflang="tr" href="tr/">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="logo" href="./"><span class="mark">skry</span></a>
+    <div class="links">
+      <a class="hide-sm" href="#features">Features</a>
+      <a class="hide-sm" href="#how">How it works</a>
+      <a href="docs/en/">Docs</a>
+      <a href="https://github.com/enderkus/skry">GitHub</a>
+      <a class="lang" href="tr/" hreflang="tr">Türkçe</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>See every server.<br><em>Install nothing.</em></h1>
+    <p class="lead">skry monitors one or a hundred Linux servers over plain SSH — CPU, memory,
+      disks, network, processes, containers, failed services and security — with
+      <strong>nothing installed or written on them</strong>.</p>
+
+    <div class="install">
+      <div class="tabs" role="tablist">
+        <button class="active" data-tab="unix" role="tab">Linux &amp; macOS</button>
+        <button data-tab="windows" role="tab">Windows</button>
+      </div>
+      <div data-pane="unix">
+        <div class="cmd"><code id="cmd-unix">curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | sh</code>
+          <button class="copy" data-copy="cmd-unix">Copy</button></div>
+      </div>
+      <div data-pane="windows" hidden>
+        <div class="cmd"><code class="ps" id="cmd-win">irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex</code>
+          <button class="copy" data-copy="cmd-win">Copy</button></div>
+      </div>
+      <div class="note">Detects your platform, verifies the SHA-256 checksum, installs one binary.
+        Prefer to do it by hand? <a href="docs/en/installation.html">Other ways to install</a>.</div>
+    </div>
+
+    <div class="cta">
+      <a class="btn primary" href="docs/en/first-run.html">Get started</a>
+      <a class="btn" href="docs/en/">Read the docs</a>
+      <a class="btn" href="https://github.com/enderkus/skry">Star on GitHub</a>
+    </div>
+    <div class="meta">Free and open source · MIT or Apache-2.0 · Linux, macOS, Windows</div>
+  </div>
+</header>
+
+<section class="demo">
+  <div class="wrap">
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i><span>skry @production</span></div>
+      <img src="assets/demo.gif" alt="skry terminal UI: a grid of server tiles coloured by health, then the detail view of one server" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="block" id="features">
+  <div class="wrap">
+    <h2>Everything you need to see, nothing to install</h2>
+    <p class="sub">One SSH session per host, one small read-only shell script per tick.
+      Everything else happens on your machine.</p>
+    <div class="grid">
+      <div class="card"><h3><span class="ico">∅</span>Agentless</h3>
+        <p>No daemon, no copied binary, no temporary files, no sudo. Close skry and nothing is left behind.</p></div>
+      <div class="card"><h3><span class="ico">r/o</span>Read-only</h3>
+        <p>skry only reads <code>/proc</code> and runs inspection commands. It has no way to run arbitrary commands on your fleet — on purpose.</p></div>
+      <div class="card"><h3><span class="ico">🔒</span>Secure by default</h3>
+        <p>Honours <code>known_hosts</code>, refuses unknown or changed host keys, uses your agent and keys, never stores passwords.</p></div>
+      <div class="card"><h3><span class="ico">▦</span>Fleet view</h3>
+        <p>Tiles coloured by health with CPU, memory, disk and load. Sort, filter, spot the problem at a glance. One broken host never blocks the others.</p></div>
+      <div class="card"><h3><span class="ico">⌕</span>Host details</h3>
+        <p>Per-core CPU, memory and swap, network and disk I/O, filesystems, top processes, Docker/Podman containers, failed systemd units.</p></div>
+      <div class="card"><h3><span class="ico">⏪</span>Time travel</h3>
+        <p>24 hours of local history, downsampled automatically. Scrub back and see the fleet — or one host — as it was.</p></div>
+      <div class="card"><h3><span class="ico">⚑</span>Security pulse</h3>
+        <p>Failed SSH logins, pending security updates, ports outside your allowlist, TLS certificates about to expire.</p></div>
+      <div class="card"><h3><span class="ico">◆</span>Baselines</h3>
+        <p>Learns what is normal for each host, per hour of day, and flags what is unusual <em>for that host</em>.</p></div>
+      <div class="card"><h3><span class="ico">🔔</span>Alerts</h3>
+        <p>Slack, Discord and JSON webhooks with deduplication, cooldown, escalation and "resolved" messages.</p></div>
+      <div class="card"><h3><span class="ico">📸</span>Incident snapshots</h3>
+        <p>Press <code>s</code> to capture the full state as Markdown and JSON — for the ticket, the post-mortem or the chat.</p></div>
+      <div class="card"><h3><span class="ico">⇄</span>Web + Prometheus</h3>
+        <p><code>skry serve</code> adds a read-only live dashboard and a <code>/metrics</code> endpoint for Grafana.</p></div>
+      <div class="card"><h3><span class="ico">1</span>One binary</h3>
+        <p>A single file for Linux (static), macOS and Windows. Works with Debian, Ubuntu, RHEL/Rocky/Alma and Alpine servers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="sub">The same SSH you already use. Nothing new to open, install or trust.</p>
+    <div class="steps">
+      <div class="step"><h3>Connect</h3>
+        <p>skry reads your <code>~/.ssh/config</code>, verifies the host key against <code>known_hosts</code> and logs in with your agent or key — through bastions with <code>ProxyJump</code> if needed.</p></div>
+      <div class="step"><h3>Read</h3>
+        <p>Every two seconds it runs one short POSIX <code>sh</code> script that prints a few <code>/proc</code> files and the output of <code>df</code>, <code>ps</code>, <code>ss</code>… then exits.</p></div>
+      <div class="step"><h3>Understand</h3>
+        <p>On your machine skry turns counters into rates, checks thresholds and baselines, raises alerts and draws the picture.</p></div>
+    </div>
+    <div class="two" style="margin-top:36px">
+      <div>
+        <h3>What actually runs on your server</h3>
+        <p class="sub" style="font-size:16px;margin-bottom:16px">Print the exact script any time with <code>skry script --all</code>. An excerpt:</p>
+        <pre class="code"><span class="c"># one command per tick, POSIX sh, read-only</span>
+LC_ALL=C; export LC_ALL
+m stat
+grep -E '^(cpu|btime|procs_)' /proc/stat
+m meminfo
+cat /proc/meminfo
+m df
+$T df -P -k -l 2>/dev/null
+m ports
+ss -tlnH 2>/dev/null || netstat -tln 2>/dev/null
+m end</pre>
+      </div>
+      <div>
+        <h3>Promises you can verify</h3>
+        <ul class="checks">
+          <li><strong>No writes.</strong> Integration tests check that a monitored host's files are unchanged after collection.</li>
+          <li><strong>No fleet-wide command execution.</strong> The only user input that reaches a shell is a validated unit name.</li>
+          <li><strong>No surprises.</strong> Missing tools or permissions show as <code>n/a</code>, never as errors or false "all clear".</li>
+          <li><strong>No passwords.</strong> Keys only; passphrases are used once and forgotten.</li>
+          <li><strong>No telemetry.</strong> Data goes only where you send it.</li>
+        </ul>
+        <p><a href="docs/en/remote-script.html">Read the full walkthrough of the script →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Answers in one line</h2>
+    <p class="sub">Beyond the live view, skry answers the questions you ask during a busy day.</p>
+    <pre class="code"><span class="c"># watch a group from your config file</span>
+skry @production
+
+<span class="c"># one sample as JSON, for scripts</span>
+skry @production --once --json | jq '.[] | {name, status}'
+
+<span class="c"># who listens on 5432? where does nginx run? is the timer healthy?</span>
+skry find port 5432 @production
+skry find proc nginx @production
+skry find service certbot.timer @production
+
+<span class="c"># security pulse, incident snapshot, web dashboard + /metrics</span>
+skry security @production
+skry snapshot @production --post
+skry serve @production</pre>
+  </div>
+</section>
+
+<section class="block alt">
+  <div class="wrap">
+    <h2>skry and agent-based monitoring</h2>
+    <p class="sub">Different tools for different jobs — and they work well together.</p>
+    <div class="table-scroll"><table class="cmp">
+      <tr><th></th><th>skry</th><th>Typical agent-based stack</th></tr>
+      <tr><td>Install on servers</td><td class="yes">Nothing</td><td class="no">An agent on every host</td></tr>
+      <tr><td>Time to first picture</td><td class="yes">Seconds</td><td class="no">Deploy agents, server, dashboards</td></tr>
+      <tr><td>Writes on servers</td><td class="yes">None</td><td class="no">Agent binaries, configs, logs</td></tr>
+      <tr><td>Network access needed</td><td class="yes">SSH you already have</td><td class="no">New ports, firewall rules</td></tr>
+      <tr><td>History</td><td>24 h local (configurable); Prometheus via <code>/metrics</code></td><td>Months, central</td></tr>
+      <tr><td>Best for</td><td>Live fleet view, incidents, customer servers, strict change control</td><td>Long-term trends, capacity planning</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="block center">
+  <div class="wrap">
+    <h2>Try it in two minutes</h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto">No servers handy? <code>skry demo</code> opens the interface with an imaginary fleet.</p>
+    <div class="cta">
+      <a class="btn primary" href="docs/en/installation.html">Install skry</a>
+      <a class="btn" href="docs/en/how-it-works.html">How it works</a>
+      <a class="btn" href="docs/en/faq.html">FAQ</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="docs/en/">Documentation</a>
+      <a href="https://github.com/enderkus/skry">GitHub</a>
+      <a href="https://github.com/enderkus/skry/releases">Releases</a>
+      <a href="https://github.com/enderkus/skry/issues">Issues</a>
+      <a href="tr/" hreflang="tr">Türkçe</a>
+    </nav>
+    <div>MIT or Apache-2.0 · Inspired by <a href="https://github.com/rapidloop/rtop">rtop</a></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skry — Her sunucuyu gör. Hiçbir şey kurma.</title>
+<meta name="description" content="skry, bir ya da birçok Linux sunucusunu düz SSH üzerinden, sunuculara hiçbir şey kurmadan ve yazmadan izler. Terminal arayüzü, web paneli, Prometheus, uyarılar.">
+<meta property="og:title" content="skry — Her sunucuyu gör. Hiçbir şey kurma.">
+<meta property="og:description" content="Düz SSH üzerinden ajansız Linux sunucu izleme. Terminal arayüzü, web paneli, Prometheus uç noktası, uyarılar ve olay anlık görüntüleri.">
+<meta property="og:image" content="https://enderkus.github.io/skry/assets/og.png">
+<link rel="alternate" hreflang="en" href="../">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="logo" href="./"><span class="mark">skry</span></a>
+    <div class="links">
+      <a class="hide-sm" href="#ozellikler">Özellikler</a>
+      <a class="hide-sm" href="#nasil">Nasıl çalışır</a>
+      <a href="../docs/tr/">Dokümanlar</a>
+      <a href="https://github.com/enderkus/skry">GitHub</a>
+      <a class="lang" href="../" hreflang="en">English</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Her sunucuyu gör.<br><em>Hiçbir şey kurma.</em></h1>
+    <p class="lead">skry bir ya da yüz Linux sunucusunu düz SSH üzerinden izler — CPU, bellek,
+      diskler, ağ, süreçler, konteynerler, çökmüş servisler ve güvenlik —
+      <strong>sunuculara hiçbir şey kurmadan ve yazmadan</strong>.</p>
+
+    <div class="install">
+      <div class="tabs" role="tablist">
+        <button class="active" data-tab="unix" role="tab">Linux ve macOS</button>
+        <button data-tab="windows" role="tab">Windows</button>
+      </div>
+      <div data-pane="unix">
+        <div class="cmd"><code id="cmd-unix">curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | sh</code>
+          <button class="copy" data-copy="cmd-unix" data-done="Kopyalandı">Kopyala</button></div>
+      </div>
+      <div data-pane="windows" hidden>
+        <div class="cmd"><code class="ps" id="cmd-win">irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex</code>
+          <button class="copy" data-copy="cmd-win" data-done="Kopyalandı">Kopyala</button></div>
+      </div>
+      <div class="note">Platformunuzu algılar, SHA-256 checksum'ını doğrular, tek bir binary kurar.
+        Elle yapmayı mı tercih edersiniz? <a href="../docs/tr/installation.html">Diğer kurulum yolları</a>.</div>
+    </div>
+
+    <div class="cta">
+      <a class="btn primary" href="../docs/tr/first-run.html">Hemen başlayın</a>
+      <a class="btn" href="../docs/tr/">Dokümanları okuyun</a>
+      <a class="btn" href="https://github.com/enderkus/skry">GitHub'da yıldızlayın</a>
+    </div>
+    <div class="meta">Ücretsiz ve açık kaynak · MIT veya Apache-2.0 · Linux, macOS, Windows</div>
+  </div>
+</header>
+
+<section class="demo">
+  <div class="wrap">
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i><span>skry @production</span></div>
+      <img src="../assets/demo.gif" alt="skry terminal arayüzü: sağlığa göre renklenen sunucu kutucukları, ardından tek bir sunucunun ayrıntı görünümü" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="block" id="ozellikler">
+  <div class="wrap">
+    <h2>Görmeniz gereken her şey, kurmanız gereken hiçbir şey</h2>
+    <p class="sub">Sunucu başına tek SSH oturumu, her ölçümde küçük ve salt okunur tek bir kabuk
+      betiği. Geri kalan her şey sizin makinenizde olur.</p>
+    <div class="grid">
+      <div class="card"><h3><span class="ico">∅</span>Ajansız</h3>
+        <p>Servis yok, kopyalanan binary yok, geçici dosya yok, sudo yok. skry'yi kapatın, arkada hiçbir şey kalmasın.</p></div>
+      <div class="card"><h3><span class="ico">r/o</span>Salt okunur</h3>
+        <p>skry yalnızca <code>/proc</code>'u okur ve inceleme komutları çalıştırır. Filoda keyfi komut çalıştırmanın hiçbir yolu yoktur — bilerek.</p></div>
+      <div class="card"><h3><span class="ico">🔒</span>Varsayılan olarak güvenli</h3>
+        <p><code>known_hosts</code>'a uyar, bilinmeyen ya da değişmiş host anahtarlarını reddeder, ajanınızı ve anahtarlarınızı kullanır, parola saklamaz.</p></div>
+      <div class="card"><h3><span class="ico">▦</span>Filo görünümü</h3>
+        <p>Sağlığa göre renklenen, CPU, bellek, disk ve yük gösteren kutucuklar. Sıralayın, filtreleyin, sorunu bir bakışta görün. Bozuk bir sunucu diğerlerini asla bloklamaz.</p></div>
+      <div class="card"><h3><span class="ico">⌕</span>Sunucu ayrıntıları</h3>
+        <p>Çekirdek başına CPU, bellek ve swap, ağ ve disk I/O, dosya sistemleri, en yoğun süreçler, Docker/Podman konteynerleri, çökmüş systemd birimleri.</p></div>
+      <div class="card"><h3><span class="ico">⏪</span>Zamanda yolculuk</h3>
+        <p>Otomatik seyreltilen 24 saatlik yerel geçmiş. Geriye gidin ve filoyu — ya da tek bir sunucuyu — o anki hâliyle görün.</p></div>
+      <div class="card"><h3><span class="ico">⚑</span>Güvenlik nabzı</h3>
+        <p>Başarısız SSH girişleri, bekleyen güvenlik güncellemeleri, izin listesi dışındaki portlar, süresi dolmak üzere olan TLS sertifikaları.</p></div>
+      <div class="card"><h3><span class="ico">◆</span>Baseline'lar</h3>
+        <p>Her sunucu için, günün saatine göre neyin normal olduğunu öğrenir ve <em>o sunucu için</em> olağandışı olanı işaretler.</p></div>
+      <div class="card"><h3><span class="ico">🔔</span>Uyarılar</h3>
+        <p>Tekilleştirme, bekleme süresi, seviye yükselmesi ve "çözüldü" mesajlarıyla Slack, Discord ve JSON webhook'ları.</p></div>
+      <div class="card"><h3><span class="ico">📸</span>Olay anlık görüntüleri</h3>
+        <p><code>s</code>'ye basın, tüm durum Markdown ve JSON olarak kaydedilsin — kayıt, olay sonrası değerlendirme ya da sohbet için.</p></div>
+      <div class="card"><h3><span class="ico">⇄</span>Web + Prometheus</h3>
+        <p><code>skry serve</code>, salt okunur canlı bir panel ve Grafana için bir <code>/metrics</code> uç noktası ekler.</p></div>
+      <div class="card"><h3><span class="ico">1</span>Tek binary</h3>
+        <p>Linux (statik), macOS ve Windows için tek dosya. Debian, Ubuntu, RHEL/Rocky/Alma ve Alpine sunucularla çalışır.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="nasil">
+  <div class="wrap">
+    <h2>Nasıl çalışır</h2>
+    <p class="sub">Zaten kullandığınız SSH. Açılacak, kurulacak ya da güvenilecek yeni bir şey yok.</p>
+    <div class="steps">
+      <div class="step"><h3>Bağlan</h3>
+        <p>skry <code>~/.ssh/config</code>'inizi okur, host anahtarını <code>known_hosts</code>'a göre doğrular ve ajanınız ya da anahtarınızla giriş yapar — gerekirse <code>ProxyJump</code> ile bastion üzerinden.</p></div>
+      <div class="step"><h3>Oku</h3>
+        <p>İki saniyede bir, birkaç <code>/proc</code> dosyasını ve <code>df</code>, <code>ps</code>, <code>ss</code>… çıktısını yazdıran kısa bir POSIX <code>sh</code> betiği çalıştırır; betik biter.</p></div>
+      <div class="step"><h3>Anla</h3>
+        <p>skry sizin makinenizde sayaçları hızlara çevirir, eşikleri ve baseline'ları denetler, uyarıları tetikler ve resmi çizer.</p></div>
+    </div>
+    <div class="two" style="margin-top:36px">
+      <div>
+        <h3>Sunucunuzda gerçekte ne çalışıyor</h3>
+        <p class="sub" style="font-size:16px;margin-bottom:16px">Betiğin tam hâlini istediğiniz zaman <code>skry script --all</code> ile yazdırın. Bir kesit:</p>
+        <pre class="code"><span class="c"># ölçüm başına tek komut, POSIX sh, salt okunur</span>
+LC_ALL=C; export LC_ALL
+m stat
+grep -E '^(cpu|btime|procs_)' /proc/stat
+m meminfo
+cat /proc/meminfo
+m df
+$T df -P -k -l 2>/dev/null
+m ports
+ss -tlnH 2>/dev/null || netstat -tln 2>/dev/null
+m end</pre>
+      </div>
+      <div>
+        <h3>Doğrulayabileceğiniz sözler</h3>
+        <ul class="checks">
+          <li><strong>Yazma yok.</strong> Entegrasyon testleri, izlenen bir sunucunun dosyalarının toplama sonrasında değişmediğini denetler.</li>
+          <li><strong>Filoda komut çalıştırma yok.</strong> Bir kabuğa ulaşan tek kullanıcı girdisi, doğrulanmış bir birim adıdır.</li>
+          <li><strong>Sürpriz yok.</strong> Eksik araçlar ya da izinler hata ya da yanlış "her şey yolunda" olarak değil, <code>n/a</code> olarak görünür.</li>
+          <li><strong>Parola yok.</strong> Yalnızca anahtarlar; parolalar bir kez kullanılıp unutulur.</li>
+          <li><strong>Telemetri yok.</strong> Veriler yalnızca sizin gönderdiğiniz yere gider.</li>
+        </ul>
+        <p><a href="../docs/tr/remote-script.html">Betiğin tam açıklamasını okuyun →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Tek satırda cevaplar</h2>
+    <p class="sub">Canlı görünümün ötesinde skry, yoğun bir günde sorduğunuz soruları cevaplar.</p>
+    <pre class="code"><span class="c"># yapılandırma dosyanızdaki bir grubu izleyin</span>
+skry @production
+
+<span class="c"># betikler için JSON olarak tek ölçüm</span>
+skry @production --once --json | jq '.[] | {name, status}'
+
+<span class="c"># 5432'yi kim dinliyor? nginx nerede çalışıyor? zamanlayıcı sağlıklı mı?</span>
+skry find port 5432 @production
+skry find proc nginx @production
+skry find service certbot.timer @production
+
+<span class="c"># güvenlik nabzı, olay anlık görüntüsü, web paneli + /metrics</span>
+skry security @production
+skry snapshot @production --post
+skry serve @production</pre>
+  </div>
+</section>
+
+<section class="block alt">
+  <div class="wrap">
+    <h2>skry ve ajan tabanlı izleme</h2>
+    <p class="sub">Farklı işler için farklı araçlar — ve birlikte iyi çalışırlar.</p>
+    <div class="table-scroll"><table class="cmp">
+      <tr><th></th><th>skry</th><th>Tipik ajan tabanlı çözüm</th></tr>
+      <tr><td>Sunuculara kurulum</td><td class="yes">Hiçbir şey</td><td class="no">Her sunucuya bir ajan</td></tr>
+      <tr><td>İlk görüntüye kadar geçen süre</td><td class="yes">Saniyeler</td><td class="no">Ajanlar, sunucu, panolar kurulmalı</td></tr>
+      <tr><td>Sunucularda yazma</td><td class="yes">Yok</td><td class="no">Ajan binary'leri, yapılandırmalar, loglar</td></tr>
+      <tr><td>Gereken ağ erişimi</td><td class="yes">Zaten sahip olduğunuz SSH</td><td class="no">Yeni portlar, güvenlik duvarı kuralları</td></tr>
+      <tr><td>Geçmiş</td><td>24 saat yerel (ayarlanabilir); <code>/metrics</code> ile Prometheus</td><td>Aylarca, merkezi</td></tr>
+      <tr><td>En uygun olduğu yer</td><td>Canlı filo görünümü, olaylar, müşteri sunucuları, katı değişiklik yönetimi</td><td>Uzun vadeli eğilimler, kapasite planlama</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="block center">
+  <div class="wrap">
+    <h2>İki dakikada deneyin</h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto">Elinizde sunucu yok mu? <code>skry demo</code>, arayüzü hayali bir filoyla açar.</p>
+    <div class="cta">
+      <a class="btn primary" href="../docs/tr/installation.html">skry'yi kurun</a>
+      <a class="btn" href="../docs/tr/how-it-works.html">Nasıl çalışır</a>
+      <a class="btn" href="../docs/tr/faq.html">SSS</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="../docs/tr/">Dokümantasyon</a>
+      <a href="https://github.com/enderkus/skry">GitHub</a>
+      <a href="https://github.com/enderkus/skry/releases">Sürümler</a>
+      <a href="https://github.com/enderkus/skry/issues">Sorun bildir</a>
+      <a href="../" hreflang="en">English</a>
+    </nav>
+    <div>MIT veya Apache-2.0 · <a href="https://github.com/rapidloop/rtop">rtop</a>'tan ilham alındı</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

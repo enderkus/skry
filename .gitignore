@@ -3,3 +3,5 @@
 *.pending-snap
 /skry-snapshot-*
 .DS_Store
+/_site
+/book/*/book
