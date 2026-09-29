@@ -698,7 +698,7 @@ pub fn parse_updates(text: &str) -> Probe<Updates> {
     for line in meaningful_lines(text) {
         match line {
             "#denied" => return Probe::na("requires root on RPM systems"),
-            "#disabled" => return Probe::na("disabled for RPM systems (see security.rpm_updates)"),
+            "#disabled" => return Probe::na("disabled on RPM systems; set security.rpm_updates"),
             l => {
                 if let Some(m) = l.strip_prefix("#manager ") {
                     manager = Some(m.trim().to_string());
