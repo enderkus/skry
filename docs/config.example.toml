@@ -1,0 +1,117 @@
+# skry configuration file.
+#
+# Location: ~/.config/skry/config.toml on Linux (and on any platform when that
+# file exists), otherwise the platform config directory, e.g.
+# ~/Library/Application Support/skry/config.toml on macOS or
+# %APPDATA%\skry\config\config.toml on Windows. Override with --config.
+#
+# Every key is optional; the values below are the defaults unless noted.
+
+# Seconds between collection ticks.
+interval = 2.0
+# Seconds between collections of the slower sections: listening ports,
+# containers, failed units, failed SSH logins and pending updates.
+slow_interval = 60.0
+# Maximum number of hosts contacted at the same time.
+concurrency = 32
+# Seconds allowed for TCP connect + SSH handshake + authentication.
+connect_timeout = 10.0
+# Seconds allowed for one remote collection command.
+command_timeout = 30.0
+
+# Static health thresholds. Tiles turn yellow at `warning` and red at
+# `critical`.
+[thresholds.cpu]
+warning = 80.0
+critical = 95.0
+
+[thresholds.memory]
+warning = 85.0
+critical = 95.0
+
+# Highest usage of any real filesystem.
+[thresholds.disk]
+warning = 80.0
+critical = 90.0
+
+# One-minute load average divided by the number of cores.
+[thresholds.load_per_core]
+warning = 1.5
+critical = 3.0
+
+[history]
+enabled = true
+# Samples older than this are deleted. Older data is downsampled
+# automatically: full resolution for the last hour, one-minute buckets up to
+# six hours, five-minute buckets beyond that.
+retention_hours = 24
+# Seconds between full host detail records (processes, disks, containers…).
+detail_interval = 30
+# path = "/var/lib/skry/history.db"
+
+# Statistical baselines: an exponentially weighted moving average of mean and
+# variance per host and metric. Values whose z-score exceeds `z_threshold`
+# after `warmup` samples are flagged as deviations.
+[baseline]
+enabled = true
+alpha = 0.02
+z_threshold = 3.5
+warmup = 300
+# Keep a separate baseline for each hour of the day.
+hourly = true
+
+[alerts]
+# Minimum seconds between two notifications for the same alert.
+cooldown = 900
+# Notify when an alert clears.
+notify_resolved = true
+# Seconds a host must stay unreachable before an alert is sent.
+unreachable_after = 60
+
+# Webhook targets. `kind` is one of "slack", "discord" or "generic" (a JSON
+# POST of the alert). `events` limits the alert categories: "threshold",
+# "baseline", "unreachable", "security". `snapshot = true` also posts
+# incident snapshots. (Not a default: shown as an example.)
+[[webhooks]]
+name = "ops-slack"
+kind = "slack"
+url = "https://hooks.slack.com/services/<your-webhook-path>"
+events = ["threshold", "unreachable", "security"]
+snapshot = true
+
+[[webhooks]]
+name = "pager"
+kind = "generic"
+url = "https://alerts.example.com/skry"
+
+[security]
+# Failed SSH authentication events in 24 hours that count as a finding.
+failed_login_threshold = 50
+# Query dnf's metadata cache for pending updates on RHEL-family hosts.
+# Off by default: dnf needs root for this and appends to its own log files
+# even for read-only queries, which conflicts with skry's no-writes rule.
+rpm_updates = false
+# TLS endpoints checked from this machine on every run.
+tls = []
+tls_warning_days = 21
+tls_critical_days = 7
+
+[web]
+bind = "127.0.0.1:9187"
+# Required when `bind` is not a loopback address. SKRY_WEB_TOKEN overrides.
+# token = "change-me"
+
+[snapshot]
+# Directory for snapshot files (default: current directory).
+# dir = "~/skry-snapshots"
+
+# Host groups, selected on the command line with @name. Hosts are names from
+# ~/.ssh/config, user@host:port, or @othergroup. (Not defaults: examples.)
+[groups.production]
+hosts = ["@web", "db1", "deploy@db2.example.com:2222"]
+
+[groups.web]
+hosts = ["web1", "web2"]
+# Listening ports outside this list are highlighted in the security pulse.
+allowed_ports = [22, 80, 443]
+tls = ["www.example.com:443"]
