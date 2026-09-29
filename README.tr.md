@@ -60,41 +60,83 @@ kullanılabilir JSON olarak sunar.
 skry kendi iş istasyonunuzda (ya da bir atlama sunucusunda) çalışır. İzlenen
 hostlarda yalnızca bir SSH sunucusu ve bir POSIX kabuğu gerekir.
 
-### Hazır binary'ler
+### Hızlı kurulum
 
-Platformunuza uygun arşivi [sürümler sayfasından](https://github.com/enderkus/skry/releases)
-indirin, yanındaki `.sha256` dosyasıyla doğrulayın ve `skry`'yi `PATH`'inizdeki
-bir dizine koyun.
+**Linux ve macOS**
 
-| Platform | Arşiv |
+```sh
+curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | sh
+```
+
+**Windows** (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex
+```
+
+Kurulum betiği platformunuzu algılar, en son sürümü indirir, SHA-256
+checksum'ını doğrular ve binary'yi kurar:
+
+| Platform | Kurulum yeri |
 | --- | --- |
-| Linux x86_64 (statik, musl) | `skry-<sürüm>-x86_64-unknown-linux-musl.tar.gz` |
-| Linux aarch64 (statik, musl) | `skry-<sürüm>-aarch64-unknown-linux-musl.tar.gz` |
-| macOS Apple Silicon | `skry-<sürüm>-aarch64-apple-darwin.tar.gz` |
-| macOS Intel | `skry-<sürüm>-x86_64-apple-darwin.tar.gz` |
-| Windows x86_64 | `skry-<sürüm>-x86_64-pc-windows-msvc.zip` |
+| Linux, macOS | Yazılabilirse `/usr/local/bin`, değilse `~/.local/bin` |
+| Windows | `%LOCALAPPDATA%\Programs\skry`; kullanıcı `PATH`'ine eklenir |
 
-**Linux**
+İki isteğe bağlı ortam değişkeni varsayılanları değiştirir:
 
 ```sh
-curl -LO https://github.com/enderkus/skry/releases/latest/download/skry-<sürüm>-x86_64-unknown-linux-musl.tar.gz
-tar xzf skry-*-x86_64-unknown-linux-musl.tar.gz
-sudo install skry-*/skry /usr/local/bin/
+# Belirli bir sürüm, seçtiğiniz bir dizine
+curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | SKRY_VERSION=v0.1.0 SKRY_INSTALL_DIR=/opt/bin sh
 ```
 
-**macOS**
+```powershell
+$env:SKRY_VERSION = 'v0.1.0'; irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex
+```
+
+Bir betiği çalıştırmadan önce okumayı mı tercih edersiniz?
+[`install.sh`](install.sh) ya da [`install.ps1`](install.ps1) dosyasını
+indirin, göz atın ve yerelde çalıştırın.
+
+### Elle indirme (v0.1.0)
+
+| Platform | Arşiv | Checksum |
+| --- | --- | --- |
+| Linux x86_64 (statik) | [skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256) |
+| Linux aarch64 (statik) | [skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz.sha256) |
+| macOS Apple Silicon | [skry-v0.1.0-aarch64-apple-darwin.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256) |
+| macOS Intel | [skry-v0.1.0-x86_64-apple-darwin.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-apple-darwin.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-apple-darwin.tar.gz.sha256) |
+| Windows x86_64 | [skry-v0.1.0-x86_64-pc-windows-msvc.zip](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-pc-windows-msvc.zip) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-pc-windows-msvc.zip.sha256) |
+
+Daha yeni sürümler [sürümler sayfasında](https://github.com/enderkus/skry/releases) listelenir.
+
+**Linux** (ARM'da `x86_64` yerine `aarch64` kullanın)
 
 ```sh
-tar xzf skry-*-aarch64-apple-darwin.tar.gz
-install skry-*/skry /usr/local/bin/
-# İndirilen binary'ler Gatekeeper tarafından karantinaya alınır; işareti bir kez kaldırın:
-xattr -d com.apple.quarantine /usr/local/bin/skry
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256
+sha256sum -c skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256
+tar xzf skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+sudo install skry-v0.1.0-x86_64-unknown-linux-musl/skry /usr/local/bin/
 ```
+
+**macOS** (Intel'de `aarch64` yerine `x86_64` kullanın)
+
+```sh
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256
+shasum -a 256 -c skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256
+tar xzf skry-v0.1.0-aarch64-apple-darwin.tar.gz
+sudo install skry-v0.1.0-aarch64-apple-darwin/skry /usr/local/bin/
+```
+
+Tarayıcıyla indirilen arşivler Gatekeeper tarafından karantinaya alınır;
+işareti bir kez `xattr -d com.apple.quarantine /usr/local/bin/skry` ile
+kaldırın.
 
 **Windows**
 
-Zip'i açın ve `skry.exe`'yi `PATH`'inizdeki bir klasöre taşıyın. skry, Windows
-OpenSSH ajanıyla (`ssh-agent` servisi) ya da Pageant ile konuşur;
+Zip'i indirin, açın ve `skry.exe`'yi `PATH`'inizdeki bir klasöre taşıyın.
+skry, Windows OpenSSH ajanıyla (`ssh-agent` servisi) ya da Pageant ile konuşur;
 `%USERPROFILE%\.ssh\config` ve `known_hosts` dosyalarını okur. En iyi arayüz
 görüntüsü için Windows Terminal kullanın.
 
@@ -105,6 +147,15 @@ Güncel bir kararlı Rust araç zinciriyle (1.85 veya üstü):
 ```sh
 cargo install --locked --git https://github.com/enderkus/skry
 ```
+
+### Kaldırma
+
+Binary'yi silin (`/usr/local/bin/skry`, `~/.local/bin/skry` ya da
+Windows'ta `%LOCALAPPDATA%\Programs\skry`; Windows'ta kullanıcı `PATH`'indeki
+girdiyi de kaldırabilirsiniz). skry, kullandıysanız yapılandırma dosyası ve
+geçmiş veritabanı dışında hiçbir şey bırakmaz (`skry config path`
+yapılandırmanın yerini gösterir; geçmiş platformun veri dizinindedir, örneğin
+Linux'ta `~/.local/share/skry`, macOS'ta `~/Library/Application Support/skry`).
 
 ## Hızlı başlangıç
 

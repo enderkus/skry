@@ -59,43 +59,84 @@ web dashboard, a Prometheus endpoint, and scriptable JSON.
 skry runs on your workstation (or a jump box). The monitored hosts only need
 an SSH server and a POSIX shell.
 
-### Prebuilt binaries
+### Quick install
 
-Download the archive for your platform from the
-[releases page](https://github.com/enderkus/skry/releases), check it against
-the `.sha256` file next to it, and put `skry` on your `PATH`.
+**Linux and macOS**
 
-| Platform | Archive |
+```sh
+curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | sh
+```
+
+**Windows** (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex
+```
+
+The installer detects your platform, downloads the latest release, verifies
+its SHA-256 checksum and installs the binary:
+
+| Platform | Installed to |
 | --- | --- |
-| Linux x86_64 (static, musl) | `skry-<version>-x86_64-unknown-linux-musl.tar.gz` |
-| Linux aarch64 (static, musl) | `skry-<version>-aarch64-unknown-linux-musl.tar.gz` |
-| macOS Apple Silicon | `skry-<version>-aarch64-apple-darwin.tar.gz` |
-| macOS Intel | `skry-<version>-x86_64-apple-darwin.tar.gz` |
-| Windows x86_64 | `skry-<version>-x86_64-pc-windows-msvc.zip` |
+| Linux, macOS | `/usr/local/bin` if writable, otherwise `~/.local/bin` |
+| Windows | `%LOCALAPPDATA%\Programs\skry`, added to your user `PATH` |
 
-**Linux**
+Two optional environment variables change the defaults:
 
 ```sh
-curl -LO https://github.com/enderkus/skry/releases/latest/download/skry-<version>-x86_64-unknown-linux-musl.tar.gz
-tar xzf skry-*-x86_64-unknown-linux-musl.tar.gz
-sudo install skry-*/skry /usr/local/bin/
+# A specific version, into a directory of your choice
+curl -fsSL https://raw.githubusercontent.com/enderkus/skry/main/install.sh | SKRY_VERSION=v0.1.0 SKRY_INSTALL_DIR=/opt/bin sh
 ```
 
-**macOS**
+```powershell
+$env:SKRY_VERSION = 'v0.1.0'; irm https://raw.githubusercontent.com/enderkus/skry/main/install.ps1 | iex
+```
+
+Prefer to read a script before running it? Download
+[`install.sh`](install.sh) or [`install.ps1`](install.ps1), look it over,
+then run it locally.
+
+### Manual download (v0.1.0)
+
+| Platform | Archive | Checksum |
+| --- | --- | --- |
+| Linux x86_64 (static) | [skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256) |
+| Linux aarch64 (static) | [skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-unknown-linux-musl.tar.gz.sha256) |
+| macOS Apple Silicon | [skry-v0.1.0-aarch64-apple-darwin.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256) |
+| macOS Intel | [skry-v0.1.0-x86_64-apple-darwin.tar.gz](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-apple-darwin.tar.gz) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-apple-darwin.tar.gz.sha256) |
+| Windows x86_64 | [skry-v0.1.0-x86_64-pc-windows-msvc.zip](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-pc-windows-msvc.zip) | [sha256](https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-pc-windows-msvc.zip.sha256) |
+
+Newer releases are listed on the [releases page](https://github.com/enderkus/skry/releases).
+
+**Linux** (use `aarch64` instead of `x86_64` on ARM)
 
 ```sh
-tar xzf skry-*-aarch64-apple-darwin.tar.gz
-install skry-*/skry /usr/local/bin/
-# Downloaded binaries are quarantined by Gatekeeper; clear the flag once:
-xattr -d com.apple.quarantine /usr/local/bin/skry
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256
+sha256sum -c skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz.sha256
+tar xzf skry-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+sudo install skry-v0.1.0-x86_64-unknown-linux-musl/skry /usr/local/bin/
 ```
+
+**macOS** (use `x86_64` instead of `aarch64` on Intel)
+
+```sh
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz
+curl -LO https://github.com/enderkus/skry/releases/download/v0.1.0/skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256
+shasum -a 256 -c skry-v0.1.0-aarch64-apple-darwin.tar.gz.sha256
+tar xzf skry-v0.1.0-aarch64-apple-darwin.tar.gz
+sudo install skry-v0.1.0-aarch64-apple-darwin/skry /usr/local/bin/
+```
+
+Archives downloaded with a browser are quarantined by Gatekeeper; clear the
+flag once with `xattr -d com.apple.quarantine /usr/local/bin/skry`.
 
 **Windows**
 
-Extract the zip and move `skry.exe` to a folder on your `PATH`. skry talks to
-the Windows OpenSSH agent (`ssh-agent` service) or Pageant, and reads
-`%USERPROFILE%\.ssh\config` and `known_hosts`. Use Windows Terminal for the
-best TUI rendering.
+Download the zip, extract it and move `skry.exe` to a folder on your `PATH`.
+skry talks to the Windows OpenSSH agent (`ssh-agent` service) or Pageant, and
+reads `%USERPROFILE%\.ssh\config` and `known_hosts`. Use Windows Terminal for
+the best TUI rendering.
 
 ### From source
 
@@ -104,6 +145,16 @@ With a recent stable Rust toolchain (1.85 or newer):
 ```sh
 cargo install --locked --git https://github.com/enderkus/skry
 ```
+
+### Uninstall
+
+Delete the binary (`/usr/local/bin/skry`, `~/.local/bin/skry`, or
+`%LOCALAPPDATA%\Programs\skry` on Windows, where you can also remove the
+entry from your user `PATH`). skry keeps nothing else except, if you used
+them, its config file and history database (`skry config path` shows the
+config location; history lives in the platform data directory, e.g.
+`~/.local/share/skry` on Linux or `~/Library/Application Support/skry` on
+macOS).
 
 ## Quickstart
 

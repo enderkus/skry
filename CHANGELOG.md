@@ -6,6 +6,11 @@ uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- One-line installers: `install.sh` for Linux and macOS, `install.ps1` for
+  Windows, with checksum verification.
+
 ## [0.1.0]
 
 First release.
