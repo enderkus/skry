@@ -348,3 +348,92 @@ async fn engine_keeps_healthy_hosts_running_when_others_fail() {
     assert_eq!(rows.len(), 3, "every host has history: {rows:?}");
     assert!(store.detail_at(&debian, now, 60_000).unwrap().is_some());
 }
+
+#[tokio::test]
+async fn cli_once_json_and_find_end_to_end() {
+    require_docker!();
+    let f = fleet();
+    let dir = f.dir.path();
+    let known = dir.join("known_hosts_cli");
+    let ssh_config = dir.join("ssh_config_cli");
+    let mut text = format!(
+        "Host *\n  User skry\n  IdentityFile {}\n  UserKnownHostsFile {}\n",
+        f.key.display(),
+        known.display()
+    );
+    for (name, port) in [
+        ("debian", 1),
+        ("ubuntu", 2),
+        ("rocky", 3),
+        ("alpine", 4),
+        ("bastion", 0),
+    ] {
+        text.push_str(&format!(
+            "Host {name}\n  HostName 127.0.0.1\n  Port {PORT_BASE}{port}\n"
+        ));
+    }
+    text.push_str("Host hidden\n  ProxyJump bastion\n");
+    std::fs::write(&ssh_config, text).unwrap();
+    let config = dir.join("config_cli.toml");
+    std::fs::write(
+        &config,
+        "[history]\nenabled = false\n[groups.lab]\nhosts = [\"debian\", \"ubuntu\", \"rocky\", \"alpine\", \"hidden\"]\nallowed_ports = [22]\n",
+    )
+    .unwrap();
+    let run = |args: &[&str]| {
+        Command::new(env!("CARGO_BIN_EXE_skry"))
+            .arg("--config")
+            .arg(&config)
+            .arg("--ssh-config")
+            .arg(&ssh_config)
+            .arg("--no-agent")
+            .args(args)
+            .output()
+            .unwrap()
+    };
+
+    // Unknown keys are refused: exit status 2, nothing recorded.
+    let out = run(&["@lab", "--once", "--json"]);
+    assert_eq!(out.status.code(), Some(2));
+    assert!(!known.exists());
+
+    let out = run(&["--accept-new", "@lab", "--once", "--json"]);
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    let hosts: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    let hosts = hosts.as_array().unwrap();
+    assert_eq!(hosts.len(), 5);
+    for h in hosts {
+        assert_eq!(h["conn"], "connected", "{h}");
+        assert!(
+            h["metrics"]["cpu"]["total_pct"].is_number(),
+            "rates need two samples: {h}"
+        );
+    }
+
+    let out = run(&["find", "port", "22", "@lab", "--json"]);
+    assert!(out.status.success());
+    let found: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert!(
+        found
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|r| r["listening"] == true)
+    );
+
+    let out = run(&["find", "proc", "sshd", "alpine"]);
+    assert!(String::from_utf8_lossy(&out.stdout).contains("/usr/sbin/sshd"));
+
+    let out = run(&["find", "service", "x;id", "debian"]);
+    assert_eq!(out.status.code(), Some(1));
+    assert!(String::from_utf8_lossy(&out.stderr).contains("invalid unit name"));
+
+    let out = run(&["security", "@lab", "--json"]);
+    assert!(out.status.success());
+    let report: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(report["hosts"].as_array().unwrap().len(), 5);
+}
