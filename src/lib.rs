@@ -18,3 +18,4 @@ pub mod ssh;
 pub mod store;
 pub mod tui;
 pub mod util;
+pub mod web;

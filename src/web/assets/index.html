@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skry</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">skry</div>
+  <div id="counts" class="counts"></div>
+  <div class="controls">
+    <input id="filter" type="search" placeholder="filter hosts…" autocomplete="off">
+    <select id="status">
+      <option value="all">all</option>
+      <option value="problems">problems</option>
+      <option value="unreachable">unreachable</option>
+    </select>
+    <select id="sort">
+      <option value="status">sort: status</option>
+      <option value="name">sort: name</option>
+      <option value="cpu">sort: cpu</option>
+      <option value="memory">sort: memory</option>
+      <option value="disk">sort: disk</option>
+    </select>
+    <nav>
+      <button id="tab-fleet" class="active">Fleet</button>
+      <button id="tab-security">Security</button>
+    </nav>
+  </div>
+  <div id="live" class="live">connecting…</div>
+</header>
+<main>
+  <section id="fleet" class="grid"></section>
+  <section id="security" hidden></section>
+</main>
+<aside id="detail" hidden>
+  <div class="detail-head">
+    <h2 id="detail-title"></h2>
+    <button id="detail-close" aria-label="close">✕</button>
+  </div>
+  <div id="detail-body"></div>
+</aside>
+<footer>read-only · agentless · <a href="/metrics">/metrics</a></footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>

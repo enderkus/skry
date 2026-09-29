@@ -1,0 +1,332 @@
+---
+source: src/web/metrics.rs
+expression: text
+---
+# HELP skry_up Whether skry can reach and read the host (1) or not (0).
+# TYPE skry_up gauge
+skry_up{host="web-1"} 1
+skry_up{host="web-2"} 1
+skry_up{host="db-1"} 1
+skry_up{host="cache-1"} 1
+skry_up{host="ci-runner"} 1
+skry_up{host="backup"} 1
+skry_up{host="legacy-app"} 0
+skry_up{host="staging-1"} 0
+# HELP skry_status Host status: 0 ok, 1 baseline deviation, 2 warning, 3 critical, 4 unreachable.
+# TYPE skry_status gauge
+skry_status{host="web-1"} 0
+skry_status{host="web-2"} 0
+skry_status{host="db-1"} 3
+skry_status{host="cache-1"} 1
+skry_status{host="ci-runner"} 2
+skry_status{host="backup"} 0
+skry_status{host="legacy-app"} 4
+skry_status{host="staging-1"} 4
+# HELP skry_cpu_usage_percent CPU busy percentage.
+# TYPE skry_cpu_usage_percent gauge
+skry_cpu_usage_percent{host="web-1"} 25.4
+skry_cpu_usage_percent{host="web-2"} 35.86671885171242
+skry_cpu_usage_percent{host="db-1"} 94.08129962499027
+skry_cpu_usage_percent{host="cache-1"} 6.291085151779095
+skry_cpu_usage_percent{host="ci-runner"} 58.21006337402632
+skry_cpu_usage_percent{host="backup"} 7.555342850556308
+# HELP skry_cpu_core_usage_percent CPU busy percentage per core.
+# TYPE skry_cpu_core_usage_percent gauge
+skry_cpu_core_usage_percent{host="web-1",core="0"} 31.4
+skry_cpu_core_usage_percent{host="web-1",core="1"} 11.127712879447735
+skry_cpu_core_usage_percent{host="web-1",core="2"} 24.862149531560313
+skry_cpu_core_usage_percent{host="web-1",core="3"} 23.50388358686746
+skry_cpu_core_usage_percent{host="web-2",core="0"} 48.03351598099347
+skry_cpu_core_usage_percent{host="web-2",core="1"} 36.391877286778225
+skry_cpu_core_usage_percent{host="web-2",core="2"} 34.82689836763895
+skry_cpu_core_usage_percent{host="web-2",core="3"} 22.179712250337694
+skry_cpu_core_usage_percent{host="db-1",core="0"} 89.28454868746593
+skry_cpu_core_usage_percent{host="db-1",core="1"} 100
+skry_cpu_core_usage_percent{host="db-1",core="2"} 100
+skry_cpu_core_usage_percent{host="db-1",core="3"} 92.76686258059078
+skry_cpu_core_usage_percent{host="db-1",core="4"} 86.1555369225425
+skry_cpu_core_usage_percent{host="db-1",core="5"} 87.15958353691201
+skry_cpu_core_usage_percent{host="db-1",core="6"} 100
+skry_cpu_core_usage_percent{host="db-1",core="7"} 99.75470419210558
+skry_cpu_core_usage_percent{host="cache-1",core="0"} 0
+skry_cpu_core_usage_percent{host="cache-1",core="1"} 5.75323468333941
+skry_cpu_core_usage_percent{host="ci-runner",core="0"} 58.735221809092124
+skry_cpu_core_usage_percent{host="ci-runner",core="1"} 57.170242889952846
+skry_cpu_core_usage_percent{host="ci-runner",core="2"} 44.52305677265159
+skry_cpu_core_usage_percent{host="ci-runner",core="3"} 62.677014703910814
+skry_cpu_core_usage_percent{host="ci-runner",core="4"} 60.37756404694253
+skry_cpu_core_usage_percent{host="ci-runner",core="5"} 71.10224208924232
+skry_cpu_core_usage_percent{host="ci-runner",core="6"} 49.558254002156175
+skry_cpu_core_usage_percent{host="ci-runner",core="7"} 55.19250171713082
+skry_cpu_core_usage_percent{host="ci-runner",core="8"} 48.309499085719025
+skry_cpu_core_usage_percent{host="ci-runner",core="9"} 69.54503327602932
+skry_cpu_core_usage_percent{host="ci-runner",core="10"} 61.663276471498996
+skry_cpu_core_usage_percent{host="ci-runner",core="11"} 63.41539543785886
+skry_cpu_core_usage_percent{host="ci-runner",core="12"} 46.127085877909124
+skry_cpu_core_usage_percent{host="ci-runner",core="13"} 54.81875522939369
+skry_cpu_core_usage_percent{host="ci-runner",core="14"} 58.61682116431185
+skry_cpu_core_usage_percent{host="ci-runner",core="15"} 69.00334110174528
+skry_cpu_core_usage_percent{host="backup",core="0"} 16.44369997694708
+skry_cpu_core_usage_percent{host="backup",core="1"} 14.414798981413089
+# HELP skry_cpu_cores Number of CPU cores.
+# TYPE skry_cpu_cores gauge
+skry_cpu_cores{host="web-1"} 4
+skry_cpu_cores{host="web-2"} 4
+skry_cpu_cores{host="db-1"} 8
+skry_cpu_cores{host="cache-1"} 2
+skry_cpu_cores{host="ci-runner"} 16
+skry_cpu_cores{host="backup"} 2
+# HELP skry_memory_used_bytes Memory in use (total minus available).
+# TYPE skry_memory_used_bytes gauge
+skry_memory_used_bytes{host="web-1"} 7043746365
+skry_memory_used_bytes{host="web-2"} 7559142440
+skry_memory_used_bytes{host="db-1"} 15118284881
+skry_memory_used_bytes{host="cache-1"} 10651518894
+skry_memory_used_bytes{host="ci-runner"} 11510512353
+skry_memory_used_bytes{host="backup"} 3092376453
+# HELP skry_memory_total_bytes Total memory.
+# TYPE skry_memory_total_bytes gauge
+skry_memory_total_bytes{host="web-1"} 17179869184
+skry_memory_total_bytes{host="web-2"} 17179869184
+skry_memory_total_bytes{host="db-1"} 17179869184
+skry_memory_total_bytes{host="cache-1"} 17179869184
+skry_memory_total_bytes{host="ci-runner"} 17179869184
+skry_memory_total_bytes{host="backup"} 17179869184
+# HELP skry_memory_usage_percent Memory usage percentage.
+# TYPE skry_memory_usage_percent gauge
+skry_memory_usage_percent{host="web-1"} 41
+skry_memory_usage_percent{host="web-2"} 44
+skry_memory_usage_percent{host="db-1"} 88
+skry_memory_usage_percent{host="cache-1"} 62
+skry_memory_usage_percent{host="ci-runner"} 67
+skry_memory_usage_percent{host="backup"} 18
+# HELP skry_swap_used_bytes Swap in use.
+# TYPE skry_swap_used_bytes gauge
+skry_swap_used_bytes{host="web-1"} 134217728
+skry_swap_used_bytes{host="web-2"} 134217728
+skry_swap_used_bytes{host="db-1"} 134217728
+skry_swap_used_bytes{host="cache-1"} 134217728
+skry_swap_used_bytes{host="ci-runner"} 134217728
+skry_swap_used_bytes{host="backup"} 134217728
+# HELP skry_swap_total_bytes Total swap.
+# TYPE skry_swap_total_bytes gauge
+skry_swap_total_bytes{host="web-1"} 2147483648
+skry_swap_total_bytes{host="web-2"} 2147483648
+skry_swap_total_bytes{host="db-1"} 2147483648
+skry_swap_total_bytes{host="cache-1"} 2147483648
+skry_swap_total_bytes{host="ci-runner"} 2147483648
+skry_swap_total_bytes{host="backup"} 2147483648
+# HELP skry_load1 One-minute load average.
+# TYPE skry_load1 gauge
+skry_load1{host="web-1"} 1.52
+skry_load1{host="web-2"} 2.24889584689499
+skry_load1{host="db-1"} 26.68834656666407
+skry_load1{host="cache-1"} 0.01940567678527294
+skry_load1{host="ci-runner"} 17.712033799480707
+skry_load1{host="backup"} 0.33702285670375387
+# HELP skry_load5 Five-minute load average.
+# TYPE skry_load5 gauge
+skry_load5{host="web-1"} 1.368
+skry_load5{host="web-2"} 2.024006262205491
+skry_load5{host="db-1"} 24.019511909997664
+skry_load5{host="cache-1"} 0.017465109106745647
+skry_load5{host="ci-runner"} 15.940830419532636
+skry_load5{host="backup"} 0.3033205710333785
+# HELP skry_load15 Fifteen-minute load average.
+# TYPE skry_load15 gauge
+skry_load15{host="web-1"} 1.2160000000000002
+skry_load15{host="web-2"} 1.799116677515992
+skry_load15{host="db-1"} 21.350677253331256
+skry_load15{host="cache-1"} 0.015524541428218352
+skry_load15{host="ci-runner"} 14.169627039584567
+skry_load15{host="backup"} 0.2696182853630031
+# HELP skry_uptime_seconds Seconds since boot.
+# TYPE skry_uptime_seconds gauge
+skry_uptime_seconds{host="web-1"} 1987200
+skry_uptime_seconds{host="web-2"} 1990800
+skry_uptime_seconds{host="db-1"} 1994400
+skry_uptime_seconds{host="cache-1"} 1998000
+skry_uptime_seconds{host="ci-runner"} 2001600
+skry_uptime_seconds{host="backup"} 2005200
+# HELP skry_network_receive_bytes_per_second Receive rate per interface.
+# TYPE skry_network_receive_bytes_per_second gauge
+skry_network_receive_bytes_per_second{host="web-1",interface="eth0"} 1410000
+skry_network_receive_bytes_per_second{host="web-2",interface="eth0"} 1574447.9234474949
+skry_network_receive_bytes_per_second{host="db-1",interface="eth0"} 1122086.6416660177
+skry_network_receive_bytes_per_second{host="cache-1",interface="eth0"} 869405.676785273
+skry_network_receive_bytes_per_second{host="ci-runner",interface="eth0"} 1264004.224935088
+skry_network_receive_bytes_per_second{host="backup",interface="eth0"} 1487022.8567037538
+# HELP skry_network_transmit_bytes_per_second Transmit rate per interface.
+# TYPE skry_network_transmit_bytes_per_second gauge
+skry_network_transmit_bytes_per_second{host="web-1",interface="eth0"} 501111.9808618737
+skry_network_transmit_bytes_per_second{host="web-2",interface="eth0"} 388021.6604165044
+skry_network_transmit_bytes_per_second{host="db-1",interface="eth0"} 324851.41919631825
+skry_network_transmit_bytes_per_second{host="cache-1",interface="eth0"} 423501.056233772
+skry_network_transmit_bytes_per_second{host="ci-runner",interface="eth0"} 479255.71417593845
+skry_network_transmit_bytes_per_second{host="backup",interface="eth0"} 416414.3302104021
+# HELP skry_network_receive_bytes_total Bytes received per interface since boot.
+# TYPE skry_network_receive_bytes_total counter
+skry_network_receive_bytes_total{host="web-1",interface="eth0"} 979252543488
+skry_network_receive_bytes_total{host="web-2",interface="eth0"} 979252543488
+skry_network_receive_bytes_total{host="db-1",interface="eth0"} 979252543488
+skry_network_receive_bytes_total{host="cache-1",interface="eth0"} 979252543488
+skry_network_receive_bytes_total{host="ci-runner",interface="eth0"} 979252543488
+skry_network_receive_bytes_total{host="backup",interface="eth0"} 979252543488
+# HELP skry_network_transmit_bytes_total Bytes transmitted per interface since boot.
+# TYPE skry_network_transmit_bytes_total counter
+skry_network_transmit_bytes_total{host="web-1",interface="eth0"} 323196289024
+skry_network_transmit_bytes_total{host="web-2",interface="eth0"} 323196289024
+skry_network_transmit_bytes_total{host="db-1",interface="eth0"} 323196289024
+skry_network_transmit_bytes_total{host="cache-1",interface="eth0"} 323196289024
+skry_network_transmit_bytes_total{host="ci-runner",interface="eth0"} 323196289024
+skry_network_transmit_bytes_total{host="backup",interface="eth0"} 323196289024
+# HELP skry_filesystem_used_bytes Used bytes per filesystem.
+# TYPE skry_filesystem_used_bytes gauge
+skry_filesystem_used_bytes{host="web-1",mount="/",device="/dev/sda1"} 47244640256
+skry_filesystem_used_bytes{host="web-1",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+skry_filesystem_used_bytes{host="web-2",mount="/",device="/dev/sda1"} 48318382080
+skry_filesystem_used_bytes{host="web-2",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+skry_filesystem_used_bytes{host="db-1",mount="/",device="/dev/sda1"} 60129542144
+skry_filesystem_used_bytes{host="db-1",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+skry_filesystem_used_bytes{host="cache-1",mount="/",device="/dev/sda1"} 17179869184
+skry_filesystem_used_bytes{host="cache-1",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+skry_filesystem_used_bytes{host="ci-runner",mount="/",device="/dev/sda1"} 71940702208
+skry_filesystem_used_bytes{host="ci-runner",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+skry_filesystem_used_bytes{host="backup",mount="/",device="/dev/sda1"} 53687091200
+skry_filesystem_used_bytes{host="backup",mount="/var/lib/data",device="/dev/sdb1"} 225485783040
+# HELP skry_filesystem_size_bytes Size per filesystem.
+# TYPE skry_filesystem_size_bytes gauge
+skry_filesystem_size_bytes{host="web-1",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="web-1",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+skry_filesystem_size_bytes{host="web-2",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="web-2",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+skry_filesystem_size_bytes{host="db-1",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="db-1",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+skry_filesystem_size_bytes{host="cache-1",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="cache-1",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+skry_filesystem_size_bytes{host="ci-runner",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="ci-runner",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+skry_filesystem_size_bytes{host="backup",mount="/",device="/dev/sda1"} 85899345920
+skry_filesystem_size_bytes{host="backup",mount="/var/lib/data",device="/dev/sdb1"} 536870912000
+# HELP skry_filesystem_usage_percent Usage percentage per filesystem.
+# TYPE skry_filesystem_usage_percent gauge
+skry_filesystem_usage_percent{host="web-1",mount="/",device="/dev/sda1"} 55
+skry_filesystem_usage_percent{host="web-1",mount="/var/lib/data",device="/dev/sdb1"} 42
+skry_filesystem_usage_percent{host="web-2",mount="/",device="/dev/sda1"} 57
+skry_filesystem_usage_percent{host="web-2",mount="/var/lib/data",device="/dev/sdb1"} 42
+skry_filesystem_usage_percent{host="db-1",mount="/",device="/dev/sda1"} 71
+skry_filesystem_usage_percent{host="db-1",mount="/var/lib/data",device="/dev/sdb1"} 42
+skry_filesystem_usage_percent{host="cache-1",mount="/",device="/dev/sda1"} 20
+skry_filesystem_usage_percent{host="cache-1",mount="/var/lib/data",device="/dev/sdb1"} 42
+skry_filesystem_usage_percent{host="ci-runner",mount="/",device="/dev/sda1"} 84
+skry_filesystem_usage_percent{host="ci-runner",mount="/var/lib/data",device="/dev/sdb1"} 42
+skry_filesystem_usage_percent{host="backup",mount="/",device="/dev/sda1"} 63
+skry_filesystem_usage_percent{host="backup",mount="/var/lib/data",device="/dev/sdb1"} 42
+# HELP skry_disk_read_bytes_per_second Read rate per block device.
+# TYPE skry_disk_read_bytes_per_second gauge
+skry_disk_read_bytes_per_second{host="web-1",device="sda"} 2400000
+skry_disk_read_bytes_per_second{host="web-2",device="sda"} 2400000
+skry_disk_read_bytes_per_second{host="db-1",device="sda"} 2400000
+skry_disk_read_bytes_per_second{host="cache-1",device="sda"} 2400000
+skry_disk_read_bytes_per_second{host="ci-runner",device="sda"} 2400000
+skry_disk_read_bytes_per_second{host="backup",device="sda"} 2400000
+# HELP skry_disk_write_bytes_per_second Write rate per block device.
+# TYPE skry_disk_write_bytes_per_second gauge
+skry_disk_write_bytes_per_second{host="web-1",device="sda"} 5100000
+skry_disk_write_bytes_per_second{host="web-2",device="sda"} 5100000
+skry_disk_write_bytes_per_second{host="db-1",device="sda"} 5100000
+skry_disk_write_bytes_per_second{host="cache-1",device="sda"} 5100000
+skry_disk_write_bytes_per_second{host="ci-runner",device="sda"} 5100000
+skry_disk_write_bytes_per_second{host="backup",device="sda"} 5100000
+# HELP skry_disk_utilization_percent Time the device was busy, percent.
+# TYPE skry_disk_utilization_percent gauge
+skry_disk_utilization_percent{host="web-1",device="sda"} 18
+skry_disk_utilization_percent{host="web-2",device="sda"} 18
+skry_disk_utilization_percent{host="db-1",device="sda"} 18
+skry_disk_utilization_percent{host="cache-1",device="sda"} 18
+skry_disk_utilization_percent{host="ci-runner",device="sda"} 18
+skry_disk_utilization_percent{host="backup",device="sda"} 18
+# HELP skry_processes Number of processes.
+# TYPE skry_processes gauge
+skry_processes{host="web-1"} 212
+skry_processes{host="web-2"} 212
+skry_processes{host="db-1"} 212
+skry_processes{host="cache-1"} 212
+skry_processes{host="ci-runner"} 212
+skry_processes{host="backup"} 212
+# HELP skry_failed_units Failed systemd units.
+# TYPE skry_failed_units gauge
+skry_failed_units{host="web-1"} 0
+skry_failed_units{host="web-2"} 0
+skry_failed_units{host="db-1"} 1
+skry_failed_units{host="cache-1"} 0
+skry_failed_units{host="ci-runner"} 0
+skry_failed_units{host="backup"} 0
+# HELP skry_failed_ssh_logins_24h Failed SSH authentication events in the last 24 hours.
+# TYPE skry_failed_ssh_logins_24h gauge
+skry_failed_ssh_logins_24h{host="web-1"} 3
+skry_failed_ssh_logins_24h{host="web-2"} 3
+skry_failed_ssh_logins_24h{host="db-1"} 1840
+skry_failed_ssh_logins_24h{host="cache-1"} 3
+skry_failed_ssh_logins_24h{host="ci-runner"} 3
+skry_failed_ssh_logins_24h{host="backup"} 3
+# HELP skry_pending_updates Pending package updates from cached metadata.
+# TYPE skry_pending_updates gauge
+skry_pending_updates{host="web-1"} 4
+skry_pending_updates{host="web-2"} 4
+skry_pending_updates{host="db-1"} 23
+skry_pending_updates{host="cache-1"} 4
+skry_pending_updates{host="ci-runner"} 4
+skry_pending_updates{host="backup"} 4
+# HELP skry_pending_security_updates Pending security updates from cached metadata.
+# TYPE skry_pending_security_updates gauge
+skry_pending_security_updates{host="web-1"} 0
+skry_pending_security_updates{host="web-2"} 0
+skry_pending_security_updates{host="db-1"} 5
+skry_pending_security_updates{host="cache-1"} 0
+skry_pending_security_updates{host="ci-runner"} 0
+skry_pending_security_updates{host="backup"} 0
+# HELP skry_listening_ports Listening TCP sockets.
+# TYPE skry_listening_ports gauge
+skry_listening_ports{host="web-1"} 3
+skry_listening_ports{host="web-2"} 3
+skry_listening_ports{host="db-1"} 2
+skry_listening_ports{host="cache-1"} 3
+skry_listening_ports{host="ci-runner"} 3
+skry_listening_ports{host="backup"} 3
+# HELP skry_security_findings Security pulse findings.
+# TYPE skry_security_findings gauge
+skry_security_findings{host="web-1"} 0
+skry_security_findings{host="web-2"} 0
+skry_security_findings{host="db-1"} 3
+skry_security_findings{host="cache-1"} 0
+skry_security_findings{host="ci-runner"} 0
+skry_security_findings{host="backup"} 0
+skry_security_findings{host="legacy-app"} 0
+skry_security_findings{host="staging-1"} 0
+# HELP skry_containers Containers by state.
+# TYPE skry_containers gauge
+skry_containers{host="web-1",state="running"} 1
+skry_containers{host="web-2",state="running"} 1
+skry_containers{host="db-1",state="running"} 1
+skry_containers{host="cache-1",state="running"} 1
+skry_containers{host="ci-runner",state="running"} 1
+skry_containers{host="backup",state="running"} 1
+# HELP skry_baseline_deviations Metrics currently deviating from their baseline.
+# TYPE skry_baseline_deviations gauge
+skry_baseline_deviations{host="web-1"} 0
+skry_baseline_deviations{host="web-2"} 0
+skry_baseline_deviations{host="db-1"} 0
+skry_baseline_deviations{host="cache-1"} 1
+skry_baseline_deviations{host="ci-runner"} 0
+skry_baseline_deviations{host="backup"} 0
+skry_baseline_deviations{host="legacy-app"} 0
+skry_baseline_deviations{host="staging-1"} 0
+# HELP skry_tls_certificate_days_left Days until the TLS certificate expires.
+# TYPE skry_tls_certificate_days_left gauge
+skry_tls_certificate_days_left{endpoint="www.example.com:443"} 64
+skry_tls_certificate_days_left{endpoint="api.example.com:443"} 5
+# HELP skry_tls_certificate_valid Whether the TLS certificate chain validates (1) or not (0).
+# TYPE skry_tls_certificate_valid gauge
+skry_tls_certificate_valid{endpoint="www.example.com:443"} 1
+skry_tls_certificate_valid{endpoint="api.example.com:443"} 1
