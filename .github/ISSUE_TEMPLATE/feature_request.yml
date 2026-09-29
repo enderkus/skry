@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest an idea for skry
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and why is it hard today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How could skry help? For new remote data, name the file or command it would read.
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Principles
+      description: skry stays agentless and read-only.
+      options:
+        - label: The idea does not require installing or writing anything on remote hosts.
+          required: true

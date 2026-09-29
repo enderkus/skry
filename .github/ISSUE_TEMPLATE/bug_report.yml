@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you run, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: skry version
+      description: Output of `skry --version`
+    validations:
+      required: true
+  - type: input
+    id: local
+    attributes:
+      label: Local platform
+      description: Where skry runs, e.g. macOS 15 on Apple Silicon, Ubuntu 24.04, Windows 11
+    validations:
+      required: true
+  - type: input
+    id: remote
+    attributes:
+      label: Remote host(s)
+      description: Distribution and version of the monitored host, e.g. Debian 12, Alpine 3.20
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: |
+        Error messages, `skry -vv --log-file skry.log ...` output, or the raw output of
+        the remote script (`skry script --all`, run over ssh). Remove anything private.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed secrets (webhook URLs, tokens, private host names) from this report.
+          required: true
