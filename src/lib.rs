@@ -10,6 +10,7 @@ pub mod alert;
 pub mod baseline;
 pub mod collect;
 pub mod config;
+pub mod engine;
 pub mod model;
 pub mod security;
 pub mod ssh;

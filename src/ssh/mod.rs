@@ -9,14 +9,14 @@ pub mod target;
 
 use std::time::Duration;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 pub use session::{ExecOutput, Session, SshOptions};
 pub use target::{ResolvedHost, resolve};
 
 /// Broad class of a connection failure, for display and alerting.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum FailureKind {
     Auth,

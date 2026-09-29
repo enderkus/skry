@@ -265,3 +265,86 @@ async fn proxy_jump_through_bastion() {
     assert!(matches!(err, SshError::Jump { .. }), "{err}");
     assert_eq!(err.kind(), FailureKind::HostKey);
 }
+
+#[tokio::test]
+async fn engine_keeps_healthy_hosts_running_when_others_fail() {
+    use skry::config::{Config, Target};
+    use skry::engine::{ConnState, Engine, HostPlan, HostStatus, Settings};
+    require_docker!();
+    let cfg = ssh_config("");
+    let known = known_hosts("engine");
+    // Pre-trust the Debian host so it can be checked strictly.
+    let debian = format!("127.0.0.1:{PORT_BASE}1");
+    Session::connect(
+        &resolve(&debian, &cfg).unwrap(),
+        &options(known.clone(), true),
+    )
+    .await
+    .unwrap();
+    let closed = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let closed_port = closed.local_addr().unwrap().port();
+    drop(closed);
+    let specs = [
+        debian.clone(),
+        format!("127.0.0.1:{PORT_BASE}3"),  // unknown host key
+        format!("127.0.0.1:{closed_port}"), // connection refused
+    ];
+    let plans: Vec<HostPlan> = specs
+        .iter()
+        .map(|s| HostPlan {
+            target: Target {
+                spec: s.clone(),
+                groups: vec![],
+                allowed_ports: Some([22].into()),
+            },
+            resolved: resolve(s, &cfg).map_err(|e| e.to_string()),
+        })
+        .collect();
+    let mut config = Config {
+        interval: 1.0,
+        ..Default::default()
+    };
+    config.history.path = Some(fleet().dir.path().join("engine-history.db"));
+    let settings = Settings::from_config(&config, vec![]);
+    let engine = Engine::start(plans, settings, options(known, false));
+    let mut changes = engine.changes();
+    let deadline = Instant::now() + Duration::from_secs(30);
+    loop {
+        let f = engine.snapshot();
+        let ready = f.hosts[0].metrics.as_ref().is_some_and(|m| m.cpu.is_some())
+            && f.hosts[1].conn == ConnState::Failed
+            && f.hosts[2].conn == ConnState::Failed;
+        if ready {
+            break;
+        }
+        assert!(Instant::now() < deadline, "engine did not converge: {f:#?}");
+        let _ = tokio::time::timeout(Duration::from_secs(1), changes.changed()).await;
+    }
+    let f = engine.snapshot();
+    assert!(matches!(
+        f.hosts[0].status,
+        HostStatus::Ok | HostStatus::Warning | HostStatus::Critical
+    ));
+    assert!(
+        f.hosts[0].findings.is_empty(),
+        "only port 22 listens: {:?}",
+        f.hosts[0].findings
+    );
+    assert_eq!(f.hosts[1].status, HostStatus::Unreachable);
+    assert_eq!(
+        f.hosts[1].error.as_ref().unwrap().kind,
+        FailureKind::HostKey
+    );
+    assert_eq!(
+        f.hosts[2].error.as_ref().unwrap().kind,
+        FailureKind::Network
+    );
+    let history = engine.history_path().cloned().unwrap();
+    engine.shutdown().await;
+
+    let store = skry::store::Store::open(&history).unwrap();
+    let now = chrono::Utc::now().timestamp_millis();
+    let rows = store.fleet_at(now, 60_000).unwrap();
+    assert_eq!(rows.len(), 3, "every host has history: {rows:?}");
+    assert!(store.detail_at(&debian, now, 60_000).unwrap().is_some());
+}
