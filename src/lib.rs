@@ -11,6 +11,7 @@ pub mod baseline;
 pub mod collect;
 pub mod config;
 pub mod model;
+pub mod security;
 pub mod ssh;
 pub mod store;
 pub mod util;
