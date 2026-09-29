@@ -10,6 +10,7 @@ uses [Semantic Versioning](https://semver.org/).
 
 - One-line installers: `install.sh` for Linux and macOS, `install.ps1` for
   Windows, with checksum verification.
+- Website with English and Turkish documentation, published to GitHub Pages.
 
 ## [0.1.0]
 

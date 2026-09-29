@@ -1,6 +1,6 @@
 # skry
 
-**English** · [Türkçe](README.tr.md)
+**English** · [Türkçe](README.tr.md) · **[Website & documentation](https://enderkus.github.io/skry/)**
 
 **See every server. Install nothing.**
 

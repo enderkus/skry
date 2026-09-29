@@ -1,6 +1,6 @@
 # skry
 
-[English](README.md) · **Türkçe**
+[English](README.md) · **Türkçe** · **[Web sitesi ve dokümantasyon](https://enderkus.github.io/skry/tr/)**
 
 **Her sunucuyu gör. Hiçbir şey kurma.**
 
