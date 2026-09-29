@@ -1,0 +1,11 @@
+.skry-top-link {
+  display: inline-block;
+  margin: 0 0.6em;
+  font-size: 0.9em;
+  line-height: var(--menu-bar-height);
+  color: var(--icons) !important;
+  text-decoration: none;
+}
+.skry-top-link:hover { color: var(--icons-hover) !important; }
+table { display: table; width: 100%; }
+td, th { vertical-align: top; }
