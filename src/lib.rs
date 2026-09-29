@@ -10,3 +10,4 @@ pub mod collect;
 pub mod config;
 pub mod model;
 pub mod ssh;
+pub mod store;
