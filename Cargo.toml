@@ -1,0 +1,58 @@
+[package]
+name = "skry"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "See every server. Install nothing. Agentless Linux server monitoring over plain SSH."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/enderkus/skry"
+readme = "README.md"
+keywords = ["monitoring", "ssh", "tui", "sysadmin", "linux"]
+categories = ["command-line-utilities", "visualization"]
+
+[[bin]]
+name = "skry"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+russh = { version = "0.63", default-features = false, features = ["ring", "rsa", "flate2"] }
+clap = { version = "4", features = ["derive", "env"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.9"
+directories = "6"
+rusqlite = { version = "0.37", features = ["bundled"] }
+ratatui = "0.30"
+crossterm = "0.29"
+axum = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+rpassword = "7"
+glob = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+webpki-roots = "1"
+x509-parser = "0.18"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+hmac = "0.13"
+sha1 = "0.11"
+base64 = "0.22"
+
+[dev-dependencies]
+insta = { version = "1", features = ["json"] }
+tempfile = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
+
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3

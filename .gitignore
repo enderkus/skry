@@ -1,0 +1,5 @@
+/target
+*.snap.new
+*.pending-snap
+/skry-snapshot-*
+.DS_Store
