@@ -1,0 +1,17 @@
+[book]
+title = "skry dokümantasyonu"
+authors = ["Ender KUŞ"]
+language = "tr"
+src = "src"
+
+[output.html]
+site-url = "/skry/docs/tr/"
+git-repository-url = "https://github.com/enderkus/skry"
+edit-url-template = "https://github.com/enderkus/skry/edit/main/book/tr/src/{path}"
+default-theme = "light"
+preferred-dark-theme = "navy"
+additional-js = ["lang.js"]
+additional-css = ["extra.css"]
+
+[output.html.search]
+enable = true
