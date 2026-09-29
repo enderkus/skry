@@ -91,7 +91,7 @@ failed_login_threshold = 50
 # Off by default: dnf needs root for this and appends to its own log files
 # even for read-only queries, which conflicts with skry's no-writes rule.
 rpm_updates = false
-# TLS endpoints checked from this machine on every run.
+# TLS endpoints checked from this machine (at start, then hourly while monitoring).
 tls = []
 tls_warning_days = 21
 tls_critical_days = 7
