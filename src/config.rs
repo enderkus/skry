@@ -597,6 +597,16 @@ mod tests {
         assert!(Config::parse("interval = 0", Path::new("x")).is_err());
         assert!(Config::parse("unknown_key = 1", Path::new("x")).is_err());
         assert!(
+            Config::parse("[thresholds.cpu]\nwarn = 1\ncritical = 2\n", Path::new("x")).is_err()
+        );
+        assert!(
+            Config::parse(
+                "[thresholds.cpus]\nwarning = 1\ncritical = 2\n",
+                Path::new("x")
+            )
+            .is_err()
+        );
+        assert!(
             Config::parse(
                 "[thresholds.cpu]\nwarning = 90\ncritical = 80\n",
                 Path::new("x")

@@ -27,6 +27,7 @@ impl Level {
 
 /// Warning and critical limits for one metric.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Band {
     pub warning: f64,
     pub critical: f64,
@@ -49,7 +50,7 @@ impl Band {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-#[serde(default)]
+#[serde(default, deny_unknown_fields)]
 pub struct Thresholds {
     /// CPU busy percentage.
     pub cpu: Band,
