@@ -1,0 +1,8 @@
+FROM alpine:3.20
+RUN apk add --no-cache openssh-server \
+ && adduser -D -s /bin/sh skry \
+ && sed -i 's/^skry:!/skry:*/' /etc/shadow \
+ && sed -i 's/^AllowTcpForwarding no/AllowTcpForwarding yes/' /etc/ssh/sshd_config
+COPY entrypoint.sh /entrypoint.sh
+EXPOSE 22
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]

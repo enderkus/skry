@@ -1,0 +1,8 @@
+FROM rockylinux:9
+RUN dnf -y -q install openssh-server iproute procps-ng \
+ && dnf clean all \
+ && useradd -m -s /bin/bash skry \
+ && passwd -l skry >/dev/null
+COPY entrypoint.sh /entrypoint.sh
+EXPOSE 22
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]

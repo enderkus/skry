@@ -1,0 +1,10 @@
+FROM debian:12
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openssh-server iproute2 procps \
+ && rm -rf /var/lib/apt/lists/* \
+ && useradd -m -s /bin/bash skry \
+ && passwd -d skry >/dev/null \
+ && passwd -l skry >/dev/null
+COPY entrypoint.sh /entrypoint.sh
+EXPOSE 22
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
