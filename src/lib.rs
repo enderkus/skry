@@ -7,3 +7,4 @@
 //! resulting state.
 
 pub mod collect;
+pub mod model;
