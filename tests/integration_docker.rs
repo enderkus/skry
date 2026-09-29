@@ -1,0 +1,267 @@
+//! Integration tests against real SSH servers in Docker containers.
+//!
+//! Run with `SKRY_DOCKER_TESTS=1 cargo test --test integration_docker`.
+//! The fleet in `tests/docker/compose.yml` is (re)created once per run with
+//! a freshly generated key. Containers are left running for inspection;
+//! remove them with `docker compose -p skry-it down`.
+
+use std::path::{Path, PathBuf};
+use std::process::Command;
+use std::sync::{Arc, OnceLock};
+use std::time::{Duration, Instant};
+
+use skry::collect::{RawSample, Section, script};
+use skry::ssh::auth::{KeyStore, NoPrompt};
+use skry::ssh::sshconfig::SshConfig;
+use skry::ssh::{FailureKind, Session, SshError, SshOptions, resolve};
+
+const PORT_BASE: &str = "2230";
+
+struct Fleet {
+    dir: tempfile::TempDir,
+    key: PathBuf,
+}
+
+fn enabled() -> bool {
+    std::env::var("SKRY_DOCKER_TESTS").is_ok_and(|v| v == "1")
+}
+
+fn fleet() -> &'static Fleet {
+    static FLEET: OnceLock<Fleet> = OnceLock::new();
+    FLEET.get_or_init(|| {
+        let dir = tempfile::tempdir().unwrap();
+        let key = dir.path().join("id_ed25519");
+        let ok = Command::new("ssh-keygen")
+            .args(["-q", "-t", "ed25519", "-N", "", "-C", "skry-it", "-f"])
+            .arg(&key)
+            .status()
+            .unwrap()
+            .success();
+        assert!(ok, "ssh-keygen failed");
+        let pubkey = std::fs::read_to_string(key.with_extension("pub")).unwrap();
+        let compose = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/docker/compose.yml");
+        let status = Command::new("docker")
+            .args(["compose", "-f"])
+            .arg(&compose)
+            .args(["up", "-d", "--build", "--force-recreate", "--wait"])
+            .env("SKRY_TEST_PUBKEY", pubkey.trim())
+            .env("SKRY_IT_PORT_BASE", PORT_BASE)
+            .status()
+            .expect("docker compose");
+        assert!(status.success(), "docker compose up failed");
+        // sshd needs a moment to generate host keys.
+        let deadline = Instant::now() + Duration::from_secs(60);
+        for port in 0..=4 {
+            let addr = format!("127.0.0.1:{PORT_BASE}{port}");
+            loop {
+                if let Ok(mut s) = std::net::TcpStream::connect(&addr) {
+                    use std::io::Read;
+                    let _ = s.set_read_timeout(Some(Duration::from_secs(2)));
+                    let mut buf = [0u8; 4];
+                    if s.read_exact(&mut buf).is_ok() && &buf == b"SSH-" {
+                        break;
+                    }
+                }
+                assert!(Instant::now() < deadline, "{addr} did not come up");
+                std::thread::sleep(Duration::from_millis(300));
+            }
+        }
+        Fleet { dir, key }
+    })
+}
+
+fn known_hosts(name: &str) -> PathBuf {
+    fleet().dir.path().join(format!("known_hosts_{name}"))
+}
+
+fn options(known: PathBuf, accept_new: bool) -> SshOptions {
+    let f = fleet();
+    let keys = Arc::new(KeyStore::new());
+    keys.prepare(std::slice::from_ref(&f.key), &[], &NoPrompt);
+    let mut o = SshOptions::new(keys);
+    o.accept_new = accept_new;
+    o.use_agent = false;
+    o.known_hosts_override = Some(vec![known]);
+    o
+}
+
+fn ssh_config(extra: &str) -> SshConfig {
+    let f = fleet();
+    let text = format!(
+        "Host *\n  IdentityFile {}\n  User skry\n{extra}",
+        f.key.display()
+    );
+    SshConfig::parse(&text, f.dir.path())
+}
+
+async fn collect(session: &Session) -> RawSample {
+    let nonce = script::new_nonce();
+    let cmd = script::build(&Section::all(false), &nonce);
+    let out = session.exec(&cmd, Duration::from_secs(60)).await.unwrap();
+    RawSample::parse(&out.stdout, &nonce)
+}
+
+macro_rules! require_docker {
+    () => {
+        if !enabled() {
+            eprintln!("set SKRY_DOCKER_TESTS=1 to run Docker integration tests");
+            return;
+        }
+    };
+}
+
+#[tokio::test]
+async fn key_auth_and_collection_on_every_distro() {
+    require_docker!();
+    let cfg = ssh_config("");
+    for (port, os) in [(1, "debian"), (2, "ubuntu"), (3, "rocky"), (4, "alpine")] {
+        let host = resolve(&format!("127.0.0.1:{PORT_BASE}{port}"), &cfg).unwrap();
+        let opts = options(known_hosts(os), true);
+        let session = Session::connect(&host, &opts)
+            .await
+            .unwrap_or_else(|e| panic!("{os}: {e}"));
+        let raw = collect(&session).await;
+        assert!(raw.complete, "{os}: truncated output");
+        assert_eq!(raw.os.as_ref().unwrap().id, os);
+        assert!(raw.stat.is_some(), "{os}: no cpu");
+        assert!(raw.mem.is_some(), "{os}: no mem");
+        assert!(!raw.procs.is_empty(), "{os}: no procs");
+        let ports = raw.ports.unwrap();
+        assert!(
+            ports.ok().unwrap().iter().any(|p| p.port == 22),
+            "{os}: sshd not listening?"
+        );
+        session.close().await;
+
+        // The recorded key is now trusted without --accept-new.
+        let opts = options(known_hosts(os), false);
+        Session::connect(&host, &opts)
+            .await
+            .unwrap_or_else(|e| panic!("{os} strict: {e}"));
+    }
+}
+
+#[tokio::test]
+async fn nothing_is_written_on_the_remote_host() {
+    require_docker!();
+    let cfg = ssh_config("");
+    let host = resolve(&format!("127.0.0.1:{PORT_BASE}1"), &cfg).unwrap();
+    let session = Session::connect(&host, &options(known_hosts("rw"), true))
+        .await
+        .unwrap();
+    let list = "find / -xdev -newer /proc/1/cmdline -type f ! -path '/proc/*' ! -path '/sys/*' ! -path '/run/*' ! -path '/var/log/*' ! -path '/dev/*' 2>/dev/null | sort";
+    let before = session
+        .exec(list, Duration::from_secs(30))
+        .await
+        .unwrap()
+        .stdout;
+    for _ in 0..3 {
+        collect(&session).await;
+    }
+    let after = session
+        .exec(list, Duration::from_secs(30))
+        .await
+        .unwrap()
+        .stdout;
+    assert_eq!(before, after, "collection modified files on the host");
+}
+
+#[tokio::test]
+async fn unknown_host_key_is_refused() {
+    require_docker!();
+    let cfg = ssh_config("");
+    let host = resolve(&format!("127.0.0.1:{PORT_BASE}1"), &cfg).unwrap();
+    let known = known_hosts("empty");
+    let err = Session::connect(&host, &options(known.clone(), false))
+        .await
+        .err()
+        .expect("unknown key accepted");
+    assert!(matches!(err, SshError::HostKeyUnknown { .. }), "{err}");
+    assert_eq!(err.kind(), FailureKind::HostKey);
+    assert!(
+        !known.exists(),
+        "known_hosts must not be written without --accept-new"
+    );
+}
+
+#[tokio::test]
+async fn changed_host_key_is_refused_even_with_accept_new() {
+    require_docker!();
+    let cfg = ssh_config("");
+    let host = resolve(&format!("127.0.0.1:{PORT_BASE}2"), &cfg).unwrap();
+    let known = known_hosts("changed");
+    std::fs::write(
+        &known,
+        format!(
+            "[127.0.0.1]:{PORT_BASE}2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG+jDkXzDAML+meMRLYztjniTgabJ/ejAVZ3JTyYqqEg\n"
+        ),
+    )
+    .unwrap();
+    let err = Session::connect(&host, &options(known, true))
+        .await
+        .err()
+        .expect("changed key accepted");
+    assert!(matches!(err, SshError::HostKeyChanged { .. }), "{err}");
+}
+
+#[tokio::test]
+async fn wrong_key_fails_authentication() {
+    require_docker!();
+    let f = fleet();
+    let other = f.dir.path().join("other_key");
+    Command::new("ssh-keygen")
+        .args(["-q", "-t", "ed25519", "-N", "", "-f"])
+        .arg(&other)
+        .status()
+        .unwrap();
+    let cfg = SshConfig::parse(
+        &format!("Host *\n  IdentityFile {}\n  User skry\n", other.display()),
+        f.dir.path(),
+    );
+    let host = resolve(&format!("127.0.0.1:{PORT_BASE}4"), &cfg).unwrap();
+    let keys = Arc::new(KeyStore::new());
+    keys.prepare(&host.identity_files, &[], &NoPrompt);
+    let mut opts = SshOptions::new(keys);
+    opts.use_agent = false;
+    opts.accept_new = true;
+    opts.known_hosts_override = Some(vec![known_hosts("wrongkey")]);
+    let err = Session::connect(&host, &opts)
+        .await
+        .err()
+        .expect("wrong key accepted");
+    assert_eq!(err.kind(), FailureKind::Auth, "{err}");
+}
+
+#[tokio::test]
+async fn proxy_jump_through_bastion() {
+    require_docker!();
+    let cfg = ssh_config(&format!(
+        "Host bastion\n  HostName 127.0.0.1\n  Port {PORT_BASE}0\nHost hidden\n  ProxyJump bastion\n"
+    ));
+    let host = resolve("hidden", &cfg).unwrap();
+    assert_eq!(host.jumps.len(), 1);
+    let known = known_hosts("jump");
+    let session = Session::connect(&host, &options(known.clone(), true))
+        .await
+        .unwrap();
+    let raw = collect(&session).await;
+    assert!(raw.complete);
+    assert_eq!(raw.os.unwrap().id, "debian");
+    let recorded = std::fs::read_to_string(&known).unwrap();
+    assert!(
+        recorded.contains(&format!("[127.0.0.1]:{PORT_BASE}0 ")),
+        "bastion key recorded"
+    );
+    assert!(
+        recorded.lines().any(|l| l.starts_with("hidden ")),
+        "target key recorded"
+    );
+
+    // An unknown bastion key stops the chain with a jump error.
+    let err = Session::connect(&host, &options(known_hosts("jump-empty"), false))
+        .await
+        .err()
+        .unwrap();
+    assert!(matches!(err, SshError::Jump { .. }), "{err}");
+    assert_eq!(err.kind(), FailureKind::HostKey);
+}
