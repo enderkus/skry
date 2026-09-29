@@ -289,8 +289,8 @@ pub fn new_nonce() -> String {
     format!("{:016x}", h.finish())
 }
 
-/// Builds the complete remote command for the given sections.
-pub fn build(sections: &[Section], nonce: &str) -> String {
+/// The POSIX sh script for the given sections, before quoting.
+pub fn script_body(sections: &[Section], nonce: &str) -> String {
     let mut s = String::with_capacity(4096);
     s.push_str("LC_ALL=C; export LC_ALL\n");
     s.push_str("PATH=\"$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"; export PATH\n");
@@ -302,9 +302,14 @@ pub fn build(sections: &[Section], nonce: &str) -> String {
         s.push('\n');
     }
     s.push_str("m end\n");
+    s
+}
+
+/// Builds the complete remote command for the given sections.
+pub fn build(sections: &[Section], nonce: &str) -> String {
     // Wrap in `sh -c` so that the remote login shell (which may be bash,
     // zsh, fish, ...) does not matter: the script always runs under POSIX sh.
-    format!("sh -c {}", shell_quote(&s))
+    format!("sh -c {}", shell_quote(&script_body(sections, nonce)))
 }
 
 /// Single-quotes a string for POSIX sh.

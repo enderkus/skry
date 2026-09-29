@@ -119,6 +119,13 @@ pub enum Command {
         #[arg(long, value_name = "ADDR")]
         bind: Option<String>,
     },
+    /// Print the read-only POSIX sh script that skry runs on each host, for
+    /// auditing. Nothing is executed.
+    Script {
+        /// Include the slow sections (ports, containers, units, logins, updates).
+        #[arg(long)]
+        all: bool,
+    },
     /// Show the config file location, print an example, or validate it.
     Config {
         #[command(subcommand)]

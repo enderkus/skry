@@ -68,6 +68,18 @@ pub async fn run(cli: Cli) -> anyhow::Result<ExitCode> {
         Some(Command::Snapshot { targets, out, post }) => snapshot(g, &targets, out, post).await,
         Some(Command::Serve { targets, bind }) => serve(g, &targets, bind).await,
         Some(Command::Config { action }) => config(g, action),
+        Some(Command::Script { all }) => {
+            let rpm = load_config(g)
+                .map(|c| c.security.rpm_updates)
+                .unwrap_or(false);
+            let sections = if all {
+                Section::all(rpm)
+            } else {
+                Section::fast()
+            };
+            print!("{}", script::script_body(&sections, "<random-per-run>"));
+            Ok(ExitCode::SUCCESS)
+        }
         Some(Command::Demo) => {
             let source = skry::tui::DemoSource::start();
             skry::tui::run(&source, &Config::default()).await?;
