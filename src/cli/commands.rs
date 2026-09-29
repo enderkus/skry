@@ -472,9 +472,17 @@ async fn serve(g: &Global, targets: &[String], bind: Option<String>) -> anyhow::
             ""
         }
     );
-    let result = skry::web::serve(listener, engine.fleet(), engine.changes(), token, async {
-        let _ = tokio::signal::ctrl_c().await;
-    })
+    let thresholds = p.config.thresholds;
+    let result = skry::web::serve(
+        listener,
+        engine.fleet(),
+        engine.changes(),
+        token,
+        thresholds,
+        async {
+            let _ = tokio::signal::ctrl_c().await;
+        },
+    )
     .await;
     engine.shutdown().await;
     result?;

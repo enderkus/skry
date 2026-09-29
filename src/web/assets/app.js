@@ -121,8 +121,18 @@ function tile(x) {
     (x.groups || []).length ? h("div", { class: "meta" }, "@" + x.groups.join(" @")) : null);
 }
 
-// Default thresholds mirror the server defaults; the tile colours only.
+// Tile colours follow the configured thresholds (defaults until loaded).
 const thresholds = { cpu: [80, 95], mem: [85, 95], disk: [80, 90] };
+
+async function loadThresholds() {
+  try {
+    const t = await (await fetch("/api/thresholds")).json();
+    thresholds.cpu = [t.cpu.warning, t.cpu.critical];
+    thresholds.mem = [t.memory.warning, t.memory.critical];
+    thresholds.disk = [t.disk.warning, t.disk.critical];
+    render();
+  } catch (_) { /* keep defaults */ }
+}
 
 function renderFleet() {
   $("fleet").replaceChildren(...visibleHosts().map(tile));
@@ -259,4 +269,5 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { $("detail").hidden = true; selected = null; }
 });
 if (location.search.includes("token=")) history.replaceState(null, "", "/");
+loadThresholds();
 connect();

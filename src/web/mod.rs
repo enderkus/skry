@@ -26,6 +26,7 @@ use tokio::sync::watch;
 
 use crate::config::Secret;
 use crate::engine::FleetState;
+use crate::model::Thresholds;
 
 const INDEX_HTML: &str = include_str!("assets/index.html");
 const APP_JS: &str = include_str!("assets/app.js");
@@ -54,6 +55,7 @@ struct AppState {
     fleet: Arc<RwLock<FleetState>>,
     changes: watch::Receiver<u64>,
     token: Option<Arc<Secret>>,
+    thresholds: Thresholds,
 }
 
 fn constant_time_eq(a: &[u8], b: &[u8]) -> bool {
@@ -240,6 +242,12 @@ fn router(state: AppState) -> Router {
         .route("/api/fleet", get(api_fleet))
         .route("/api/host/{name}", get(api_host))
         .route("/api/events", get(events))
+        .route(
+            "/api/thresholds",
+            get(|State(s): State<AppState>| async move {
+                json_response(serde_json::to_string(&s.thresholds).unwrap_or_default())
+            }),
+        )
         .route("/metrics", get(prometheus))
         .route("/healthz", get(|| async { "ok\n" }))
         .layer(middleware::from_fn_with_state(state.clone(), auth))
@@ -273,12 +281,14 @@ pub async fn serve(
     fleet: Arc<RwLock<FleetState>>,
     changes: watch::Receiver<u64>,
     token: Option<Secret>,
+    thresholds: Thresholds,
     shutdown: impl std::future::Future<Output = ()> + Send + 'static,
 ) -> Result<(), WebError> {
     let state = AppState {
         fleet,
         changes,
         token: token.map(Arc::new),
+        thresholds,
     };
     axum::serve(listener, router(state))
         .with_graceful_shutdown(shutdown)
@@ -302,6 +312,7 @@ mod tests {
             fleet.clone(),
             rx,
             secret,
+            Thresholds::default(),
             std::future::pending(),
         ));
         (format!("http://{addr}"), tx, fleet)
@@ -329,6 +340,15 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(fleet["hosts"].as_array().unwrap().len(), 8);
+        let t: serde_json::Value = c
+            .get(format!("{base}/api/thresholds"))
+            .send()
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        assert_eq!(t["cpu"]["critical"], 95.0);
         let host = c.get(format!("{base}/api/host/db-1")).send().await.unwrap();
         assert_eq!(host.status(), 200);
         assert_eq!(
