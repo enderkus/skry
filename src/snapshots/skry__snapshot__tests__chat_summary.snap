@@ -1,0 +1,7 @@
+---
+source: src/snapshot.rs
+expression: snapshot().summary()
+---
+skry snapshot 2026-09-29 01:06:00 UTC — 2 hosts
+• backup01 [ok] cpu n/a mem 7.5% disk 18.8%
+• db02 [unreachable] — timed out while connecting

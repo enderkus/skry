@@ -13,6 +13,7 @@ pub mod config;
 pub mod engine;
 pub mod model;
 pub mod security;
+pub mod snapshot;
 pub mod ssh;
 pub mod store;
 pub mod util;

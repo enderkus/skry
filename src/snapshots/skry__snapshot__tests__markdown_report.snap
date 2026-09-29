@@ -1,0 +1,74 @@
+---
+source: src/snapshot.rs
+expression: snapshot().to_markdown()
+---
+# skry incident snapshot
+
+Taken 2026-09-29 01:06:00 UTC by skry test — 2 host(s).
+
+## Summary
+
+| Host | Status | CPU | Memory | Disk | Load/core | Uptime | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| backup01 | ok | n/a | 7.5% | 18.8% | 0.01 | 7m 36s |  |
+| db02 | unreachable | n/a | n/a | n/a | n/a | n/a | timed out while connecting |
+
+## backup01
+
+- Status: **ok**
+- Address: `root@10.0.0.7:22`
+- Groups: production
+- Hostname: `87c87fc63d72`
+- OS: Debian GNU/Linux 12 (bookworm)
+- Kernel: 7.0.14-orbstack-00380-ga7e0a2dc9535 (aarch64)
+- CPU: 10 cores
+- Uptime: 7m 36s
+- Addresses: 192.168.215.6/24
+- Sampled: 2026-09-29 01:05:40 UTC
+
+### Resources
+
+- Load: 0.12 0.17 0.10 (1 running / 488 tasks)
+- Memory: 599 MiB / 7.8 GiB (7.5%), cache 445 MiB; swap 0 B / 8.8 GiB (0.0%)
+
+| Mount | Filesystem | Used | Size | Use% |
+| --- | --- | --- | --- | --- |
+| / | overlay | 15.5 GiB | 82.4 GiB | 18.8% |
+| /etc/hosts | /dev/vdb1 | 15.5 GiB | 82.4 GiB | 18.8% |
+
+| Device | Read/s | Write/s | IOPS r/w | Util |
+| --- | --- | --- | --- | --- |
+| vda | 0 B | 0 B | 0/0 | 0% |
+| vdb | 0 B | 0 B | 0/0 | 0% |
+| vdc | 0 B | 0 B | 0/0 | 0% |
+
+| Interface | RX/s | TX/s | Errors | Drops |
+| --- | --- | --- | --- | --- |
+| eth0 | 0 B | 0 B | 0 | 0 |
+
+### Top processes (8 total)
+
+| PID | User | Command | CPU% | Mem% | RSS |
+| --- | --- | --- | --- | --- | --- |
+| 27 | root | systemd-journal | … | 0.1 | 6.9 MiB |
+| 1 | root | systemd | … | 0.1 | 6.3 MiB |
+| 50 | root | sshd | … | 0.1 | 5.2 MiB |
+
+### Services and containers
+
+- Failed units:
+  - `backup-nightly.service` (failed/failed) Nightly backup job
+  - `demo-app.service` (failed/failed) Demo web app
+- Containers: n/a (no docker or podman)
+
+### Security
+
+- Listening TCP: 0.0.0.0:22, [::]:22
+- Failed SSH logins (24h, journal): 9 — 127.0.0.1 (7), ::1 (2)
+- Pending updates (apt): 1 total, 1 security
+
+## db02
+
+- Status: **unreachable**
+- Address: `admin@10.0.0.9:22`
+- Error (timeout), since 01:00:00: timed out while connecting

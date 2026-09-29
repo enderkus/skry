@@ -197,6 +197,16 @@ pub struct ListenPort {
     pub addr: String,
 }
 
+impl std::fmt::Display for ListenPort {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.addr.contains(':') {
+            write!(f, "[{}]:{}", self.addr, self.port)
+        } else {
+            write!(f, "{}:{}", self.addr, self.port)
+        }
+    }
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Container {
     pub runtime: String,
